@@ -158,17 +158,20 @@ void rvWeaponRocketLauncher::Think ( void ) {
 		}
 
 		for ( i = guideEnts.Num() - 1; i >= 0; i -- ) {
+
 			idGuidedProjectile* proj = static_cast<idGuidedProjectile*>(guideEnts[i].GetEntity());
-			if ( !proj || proj->IsHidden ( ) ) {
-				guideEnts.RemoveIndex ( i );
+
+			if (!proj || proj->IsHidden()) {
+				guideEnts.RemoveIndex(i);
 				continue;
 			}
-			
+
 			// If the rocket is still guiding then stop the guide and slow it down
-			if ( proj->GetGuideType ( ) != idGuidedProjectile::GUIDE_NONE ) {
-				proj->CancelGuide ( );				
-				proj->SetSpeed ( guideSpeedFast, (1.0f - (proj->GetSpeed ( ) - guideSpeedSlow) / (guideSpeedFast - guideSpeedSlow)) * guideAccelTime );
+			if (proj->GetGuideType() != idGuidedProjectile::GUIDE_NONE) {
+				proj->CancelGuide();
+				proj->SetSpeed(guideSpeedFast, (1.0f - (proj->GetSpeed() - guideSpeedSlow) / (guideSpeedFast - guideSpeedSlow)) * guideAccelTime);
 			}
+			
 		}
 
 		return;
@@ -222,6 +225,7 @@ void rvWeaponRocketLauncher::OnLaunchProjectile ( idProjectile* proj ) {
 	idEntityPtr<idEntity> ptr;
 	ptr = proj;
 	guideEnts.Append ( ptr );	
+
 }
 
 /*
@@ -438,6 +442,8 @@ stateResult_t rvWeaponRocketLauncher::State_Idle( const stateParms_t& parms ) {
 rvWeaponRocketLauncher::State_Fire
 ================
 */
+int numOfBursts = 3;
+
 stateResult_t rvWeaponRocketLauncher::State_Fire ( const stateParms_t& parms ) {
 	enum {
 		STAGE_INIT,
@@ -445,12 +451,29 @@ stateResult_t rvWeaponRocketLauncher::State_Fire ( const stateParms_t& parms ) {
 	};	
 	switch ( parms.stage ) {
 		case STAGE_INIT:
-			nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));		
-			Attack ( false, 1, spread, 0, 1.0f );
-			PlayAnim ( ANIMCHANNEL_LEGS, "fire", parms.blendFrames );	
+			//UNDO if to make working again
+			if (numOfBursts > 0) {
+				numOfBursts--;
+				nextAttackTime = gameLocal.time + (10 * owner->PowerUpModifier(PMOD_FIRERATE));
+			}
+			else {
+				nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier(PMOD_FIRERATE));
+			}
+				
+
+			Attack ( false, 5, 10, 0, 1.0f );
+			PlayAnim ( ANIMCHANNEL_LEGS, "fire", parms.blendFrames );
+			
+
 			return SRESULT_STAGE ( STAGE_WAIT );
 	
-		case STAGE_WAIT:			
+		case STAGE_WAIT:		
+
+			if(numOfBursts > 0 && gameLocal.time >= nextAttackTime){
+				SetState("Fire", 0);
+				return SRESULT_DONE;
+			}
+			
 			if ( wsfl.attack && gameLocal.time >= nextAttackTime && ( gameLocal.isClient || AmmoInClip ( ) ) && !wsfl.lowerWeapon ) {
 				SetState ( "Fire", 0 );
 				return SRESULT_DONE;

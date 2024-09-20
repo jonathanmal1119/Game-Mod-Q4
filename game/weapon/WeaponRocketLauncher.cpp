@@ -442,7 +442,8 @@ stateResult_t rvWeaponRocketLauncher::State_Idle( const stateParms_t& parms ) {
 rvWeaponRocketLauncher::State_Fire
 ================
 */
-int numOfBursts = 3;
+int numOfBursts = 5;
+bool burstflag = false;
 
 stateResult_t rvWeaponRocketLauncher::State_Fire ( const stateParms_t& parms ) {
 	enum {
@@ -451,34 +452,34 @@ stateResult_t rvWeaponRocketLauncher::State_Fire ( const stateParms_t& parms ) {
 	};	
 	switch ( parms.stage ) {
 		case STAGE_INIT:
-			//UNDO if to make working again
+			common->Printf("Init\n");
+
 			if (numOfBursts > 0) {
 				numOfBursts--;
-				nextAttackTime = gameLocal.time + (10 * owner->PowerUpModifier(PMOD_FIRERATE));
+				nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier(PMOD_FIRERATE));
 			}
 			else {
 				nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier(PMOD_FIRERATE));
 			}
 				
-
-			Attack ( false, 5, 10, 0, 1.0f );
+			Attack ( false, 1, 1, 0, 1.0f );
 			PlayAnim ( ANIMCHANNEL_LEGS, "fire", parms.blendFrames );
 			
-
 			return SRESULT_STAGE ( STAGE_WAIT );
 	
-		case STAGE_WAIT:		
+		case STAGE_WAIT:
 
-			if(numOfBursts > 0 && gameLocal.time >= nextAttackTime){
-				SetState("Fire", 0);
-				return SRESULT_DONE;
-			}
-			
-			if ( wsfl.attack && gameLocal.time >= nextAttackTime && ( gameLocal.isClient || AmmoInClip ( ) ) && !wsfl.lowerWeapon ) {
+			if (wsfl.attack && gameLocal.time >= nextAttackTime && ( gameLocal.isClient || AmmoInClip ( ) ) && !wsfl.lowerWeapon ) {
 				SetState ( "Fire", 0 );
 				return SRESULT_DONE;
 			}
+
 			if ( gameLocal.time > nextAttackTime && AnimDone ( ANIMCHANNEL_LEGS, 4 ) ) {
+				common->Printf("IdleFire\n\n");
+				if (numOfBursts > 0) {
+					SetState("Fire", 0);
+					return SRESULT_DONE_WAIT;
+				}
 				SetState ( "Idle", 4 );
 				return SRESULT_DONE;
 			}
@@ -492,7 +493,7 @@ stateResult_t rvWeaponRocketLauncher::State_Fire ( const stateParms_t& parms ) {
 rvWeaponRocketLauncher::State_Rocket_Idle
 ================
 */
-stateResult_t rvWeaponRocketLauncher::State_Rocket_Idle ( const stateParms_t& parms ) {
+stateResult_t rvWeaponRocketLauncher::State_Rocket_Idle ( const stateParms_t& parms ) {;
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,

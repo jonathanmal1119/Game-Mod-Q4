@@ -2503,6 +2503,7 @@ rvWeapon::Attack
 ================
 */
 void rvWeapon::Attack( bool altAttack, int num_attacks, float spread, float fuseOffset, float power ) {
+	common->Printf("Attacked\n");
 	idVec3 muzzleOrigin;
 	idMat3 muzzleAxis;
 	
@@ -2596,12 +2597,15 @@ void rvWeapon::Attack( bool altAttack, int num_attacks, float spread, float fuse
 		if ( altAttack ? wfl.attackAltHitscan : wfl.attackHitscan ) {
 			Hitscan( dict, muzzleOrigin, muzzleAxis, num_attacks, spread, power );
 		} else {
+			common->Printf("Launched\n");
 			LaunchProjectiles( dict, muzzleOrigin, muzzleAxis, num_attacks, spread, fuseOffset, power );
 		}
 		//asalmon:  changed to keep stats even in single player 
 		statManager->WeaponFired( owner, weaponIndex, num_attacks );
 		
 	}
+	else
+		common->Printf("Did not Launch\n");
 }
 
 /*

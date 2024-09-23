@@ -443,7 +443,6 @@ rvWeaponRocketLauncher::State_Fire
 ================
 */
 int numOfBursts = 5;
-bool burstflag = false;
 
 stateResult_t rvWeaponRocketLauncher::State_Fire ( const stateParms_t& parms ) {
 	enum {
@@ -456,10 +455,11 @@ stateResult_t rvWeaponRocketLauncher::State_Fire ( const stateParms_t& parms ) {
 
 			if (numOfBursts > 0) {
 				numOfBursts--;
-				nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier(PMOD_FIRERATE));
+				nextAttackTime = gameLocal.time + (fireRate * 0.5);
 			}
 			else {
 				nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier(PMOD_FIRERATE));
+				nextAttackTime + 300; //Add time to simulate slower firerate
 			}
 				
 			Attack ( false, 1, 1, 0, 1.0f );

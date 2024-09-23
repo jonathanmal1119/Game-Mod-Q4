@@ -49,6 +49,10 @@ protected:
 
 	bool								idleEmpty;
 
+	int									maxNumOfBursts = 3;
+	bool								burstFireEnabled = true;
+	int									currentBurstsLeft = maxNumOfBursts;
+
 private:
 
 	stateResult_t		State_Idle				( const stateParms_t& parms );
@@ -93,7 +97,7 @@ rvWeaponRocketLauncher::Spawn
 */
 void rvWeaponRocketLauncher::Spawn ( void ) {
 	float f;
-
+	
 	idleEmpty = false;
 	
 	spawnArgs.GetFloat ( "lockRange", "0", guideRange );
@@ -105,7 +109,7 @@ void rvWeaponRocketLauncher::Spawn ( void ) {
 	reloadRate = SEC2MS ( spawnArgs.GetFloat ( "reloadRate", ".8" ) );
 	
 	guideAccelTime = SEC2MS ( spawnArgs.GetFloat ( "lockAccelTime", ".25" ) );
-	
+
 	// Start rocket thread
 	rocketThread.SetName ( viewModel->GetName ( ) );
 	rocketThread.SetOwner ( this );
@@ -287,7 +291,7 @@ void rvWeaponRocketLauncher::Restore( idRestoreGame *saveFile ) {
 	saveFile->ReadFloat( guideAccelTime );
 	
 	saveFile->ReadFloat ( reloadRate );
-	
+
 	rocketThread.Restore( saveFile, this );	
 }
 
@@ -445,7 +449,14 @@ stateResult_t rvWeaponRocketLauncher::State_Fire ( const stateParms_t& parms ) {
 	};	
 	switch ( parms.stage ) {
 		case STAGE_INIT:
-			nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));		
+			if (burstFireEnabled && currentBurstsLeft > 0) {
+				currentBurstsLeft--;
+				nextAttackTime = gameLocal.time;
+			}
+			else {
+				nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier(PMOD_FIRERATE));
+				nextAttackTime += 300; //Add time to simulate slower fireing rate.
+			}
 			Attack ( false, 1, spread, 0, 1.0f );
 			PlayAnim ( ANIMCHANNEL_LEGS, "fire", parms.blendFrames );	
 			return SRESULT_STAGE ( STAGE_WAIT );
@@ -456,6 +467,14 @@ stateResult_t rvWeaponRocketLauncher::State_Fire ( const stateParms_t& parms ) {
 				return SRESULT_DONE;
 			}
 			if ( gameLocal.time > nextAttackTime && AnimDone ( ANIMCHANNEL_LEGS, 4 ) ) {
+				if ( burstFireEnabled && currentBurstsLeft > 0) {
+					SetState( "Fire", 0 );
+					return SRESULT_DONE_WAIT;
+				}
+
+				if (burstFireEnabled && currentBurstsLeft == 0) {
+					currentBurstsLeft = maxNumOfBursts;
+				}
 				SetState ( "Idle", 4 );
 				return SRESULT_DONE;
 			}

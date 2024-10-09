@@ -3038,6 +3038,18 @@ void Cmd_ClientOverflowReliable_f( const idCmdArgs& args ) {
 }
 #endif
 
+void Cmd_listGUIs_f(const idCmdArgs& args) {
+	common->Printf("PLEASE");
+	gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("showUnnamed");
+}
+
+void Cmd_craft_f(const idCmdArgs& args) {
+	common->Printf("Crafting %s %s", args.Argv(1), args.Argv(2));
+
+	gameLocal.GetLocalPlayer()->Craft(args.Argv(1))
+}
+
+
 /*
 =================
 idGameLocal::InitConsoleCommands
@@ -3232,6 +3244,10 @@ void idGameLocal::InitConsoleCommands( void ) {
 	cmdSystem->AddCommand( "buyMenu",				Cmd_ToggleBuyMenu_f,		CMD_FL_GAME,				"Toggle buy menu (if in a buy zone and the game type supports it)" );
 	cmdSystem->AddCommand( "buy",					Cmd_BuyItem_f,				CMD_FL_GAME,				"Buy an item (if in a buy zone and the game type supports it)" );
 // RITUAL END
+
+	
+	cmdSystem->AddCommand("listGUIs", Cmd_listGUIs_f, CMD_FL_GAME, "Buy an item (if in a buy zone and the game type supports it)");
+	cmdSystem->AddCommand("craft", Cmd_craft_f, CMD_FL_GAME, "Crafts X amount of an item. Syntax: craft <item> <amount>");
 
 }
 

@@ -265,6 +265,28 @@ public:
 //	idList<rvDatabaseEntry>	database;
 	
 	int						secretAreasDiscovered;
+	
+	enum Materials {
+		iron,
+		copper,
+		plastic,
+	};
+
+	// Raw Materials
+	idDict rawMaterials;
+
+	// Custom Tools
+
+	bool					Welder;
+	bool					Hammer;
+	bool					Forge;
+	bool					Smelter;
+	bool					Hand_Saw;
+
+	// Custom Weapons
+
+
+	//idList<idDict*>			rawMaterials;
 };
 
 class idPlayer : public idActor {
@@ -795,6 +817,28 @@ public:
 	void					SetCash( float newCashAmount );
 	void					ResetCash();
 // RITUAL END
+
+	// Custom Functions
+	enum Materials {
+		iron,
+		copper,
+		plastic,
+	};
+
+	enum Recipies {
+		// Tools
+		Welder,
+		Hammer,
+		Forge,
+		Smelter,
+		Hand_Saw,
+
+		// Weapons
+
+		// Win Condition Items
+	};
+
+	void					Craft(const char* weaponName, int amount);
 
 protected:
 	void					SetupHead( const char* modelKeyName = "", idVec3 headOffset = idVec3(0, 0, 0) );

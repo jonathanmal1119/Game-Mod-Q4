@@ -14077,4 +14077,15 @@ int idPlayer::CanSelectWeapon(const char* weaponName)
 	return weaponNum;
 }
 
+void idPlayer::Craft(const char* weaponName, int amount) {
+	const idDict* damageDict = gameLocal.FindEntityDefDict( "recipe_welder", false);
+	if (!damageDict) {
+		gameLocal.Warning("Unknown recipeDef '%s'", "recipe_welder");
+		return;
+	}
+	
+	common->Printf("Recipie Welder: %i", damageDict->GetInt("iron", 0));
+
+}
+
 // RITUAL END

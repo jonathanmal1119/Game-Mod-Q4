@@ -531,6 +531,16 @@ void GiveStuffToPlayer( idPlayer* player, const char* name, const char* value )
 		return;
 	}
 
+	int testCond;
+	gameLocal.GetLocalPlayer()->inventory.materials.GetInt(name, "-1", testCond);
+
+	if (testCond >= 0) {
+		testCond += atoi(value);
+		gameLocal.GetLocalPlayer()->inventory.materials.SetInt(name, testCond);
+		// TODO: Update HUD
+		return;
+	}
+
 	if ( !give_all && !player->Give( name, value ) ) {
 		gameLocal.Printf( "unknown item\n" );
 	}
@@ -3038,14 +3048,17 @@ void Cmd_ClientOverflowReliable_f( const idCmdArgs& args ) {
 }
 #endif
 
-void Cmd_listGUIs_f(const idCmdArgs& args) {
-	common->Printf("PLEASE");
-	gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("showUnnamed");
+void Cmd_listMats_f(const idCmdArgs& args) {
+	for (int i = 0; i < gameLocal.GetLocalPlayer()->inventory.materials.GetNumKeyVals() - 1; i++) {
+		const idKeyValue* item = gameLocal.GetLocalPlayer()->inventory.materials.GetKeyVal(i);
+		idStr key = item->GetKey();
+		int amt;
+		gameLocal.GetLocalPlayer()->inventory.materials.GetInt(key.c_str(), "-1", amt);
+		common->Printf("%d %s\n",amt,key.c_str());
+	}
 }
 
 void Cmd_craft_f(const idCmdArgs& args) {
-	common->Printf("Crafting: %s %s\n", args.Argv(2), args.Argv(1));
-
 	gameLocal.GetLocalPlayer()->Craft(args.Argv(1), atoi(args.Argv(2)));
 }
 
@@ -3247,7 +3260,7 @@ void idGameLocal::InitConsoleCommands( void ) {
 // RITUAL END
 
 	
-	cmdSystem->AddCommand("listGUIs", Cmd_listGUIs_f, CMD_FL_GAME, "Buy an item (if in a buy zone and the game type supports it)");
+	cmdSystem->AddCommand("listMats", Cmd_listMats_f, CMD_FL_GAME, "Buy an item (if in a buy zone and the game type supports it)");
 	cmdSystem->AddCommand("craft", Cmd_craft_f, CMD_FL_GAME, "Crafts X amount of an item. Syntax: craft <item> <amount>");
 
 }

@@ -265,15 +265,9 @@ public:
 //	idList<rvDatabaseEntry>	database;
 	
 	int						secretAreasDiscovered;
-	
-	enum Materials {
-		iron,
-		copper,
-		plastic,
-	};
 
 	// Raw Materials
-	idDict rawMaterials;
+	idDict materials;
 
 	// Custom Tools
 
@@ -285,8 +279,6 @@ public:
 
 	// Custom Weapons
 
-
-	//idList<idDict*>			rawMaterials;
 };
 
 class idPlayer : public idActor {
@@ -838,7 +830,7 @@ public:
 		// Win Condition Items
 	};
 
-	void					Craft(const char* weaponName, int amount);
+	void					Craft(const char* recipe, int amount);
 
 protected:
 	void					SetupHead( const char* modelKeyName = "", idVec3 headOffset = idVec3(0, 0, 0) );

@@ -3044,15 +3044,16 @@ void Cmd_listGUIs_f(const idCmdArgs& args) {
 }
 
 void Cmd_craft_f(const idCmdArgs& args) {
-	common->Printf("Crafting %s %s", args.Argv(1), args.Argv(2));
+	common->Printf("Crafting: %s %s\n", args.Argv(2), args.Argv(1));
 
-	gameLocal.GetLocalPlayer()->Craft(args.Argv(1))
+	gameLocal.GetLocalPlayer()->Craft(args.Argv(1), atoi(args.Argv(2)));
 }
 
 
 /*
 =================
 idGameLocal::InitConsoleCommands
+
 
 Let the system know about all of our commands
 so it can perform tab completion

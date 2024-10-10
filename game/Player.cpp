@@ -1342,6 +1342,27 @@ idPlayer::idPlayer() {
 	teamAmmoRegenPending	= false;
 	teamDoubler			= NULL;		
 	teamDoublerPending		= false;
+
+
+//================================
+//		Setup Inital Materials
+//================================
+
+
+	// T1
+	inventory.materials.Set("iron","0");
+	inventory.materials.Set("copper", "0");
+	inventory.materials.Set("plastic", "0");
+
+	// T2
+	inventory.materials.Set("computer_case", "0");
+	inventory.materials.Set("server_rack", "0");
+	inventory.materials.Set("circuit_board", "0");
+
+	// T3
+	inventory.materials.Set("computer", "0");
+	inventory.materials.Set("server", "0");
+
 }
 
 /*
@@ -14077,15 +14098,62 @@ int idPlayer::CanSelectWeapon(const char* weaponName)
 	return weaponNum;
 }
 
-void idPlayer::Craft(const char* weaponName, int amount) {
-	const idDict* damageDict = gameLocal.FindEntityDefDict( "recipe_welder", false);
-	if (!damageDict) {
-		gameLocal.Warning("Unknown recipeDef '%s'", "recipe_welder");
+// RITUAL END
+
+void idPlayer::Craft(const char* recipe, int amount) {
+
+	const idDict* recipeDict = gameLocal.FindEntityDefDict(recipe, false);
+
+	if (!recipeDict) {
+		gameLocal.Warning("Unknown recipeDef '%s'", recipe);
 		return;
 	}
-	
-	common->Printf("Recipie Welder: %i", damageDict->GetInt("iron", 0));
 
+	for (int i = 0; i < recipeDict->GetNumKeyVals() - 1; i++) {
+
+		int val;
+		int invAmt;
+		
+		const idKeyValue* ingredient = recipeDict->GetKeyVal(i);
+		idStr key = ingredient->GetKey();
+
+		recipeDict->GetInt(key.c_str(),"0",val);
+		val *= amount;
+
+		invAmt = inventory.materials.GetInt(key.c_str());
+
+		// Can't Afford so exit
+		if (!(val <= invAmt)) {
+			return;
+		}
+	}
+
+	// Can Afford so now transact
+	for (int i = 0; i < recipeDict->GetNumKeyVals() - 1; i++) {
+
+		int val;
+		int invAmt;
+
+		const idKeyValue* ingredient = recipeDict->GetKeyVal(i);
+		idStr key = ingredient->GetKey();
+
+		recipeDict->GetInt(key.c_str(), "0", val);
+		invAmt = inventory.materials.GetInt(key.c_str());
+
+		int newAmt = invAmt -= (val * amount);
+		inventory.materials.SetInt(key.c_str(), newAmt);
+	}
+
+	idStr* recipeKey = new idStr(recipe, 7, strlen(recipe));
+
+	int recipeAmt;
+	inventory.materials.GetInt(recipeKey->c_str(), "0", recipeAmt);
+	recipeAmt += amount;
+
+	inventory.materials.SetInt(recipeKey->c_str(), recipeAmt);
+
+	inventory.materials.GetInt(recipeKey->c_str(), "0", recipeAmt);
+	common->Printf("%s %s", recipeKey->c_str(), recipeAmt);
 }
 
-// RITUAL END
+

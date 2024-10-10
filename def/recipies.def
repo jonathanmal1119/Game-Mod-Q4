@@ -1,0 +1,81 @@
+
+// ======================
+//		   Tools
+// ======================
+
+entityDef recipe_soldering_iron
+{
+	"iron"						5
+	"copper"					5
+	"plastic"					2
+}
+
+entityDef recipe_hammer
+{
+	"iron"						5
+	"plastic"					5
+}
+
+entityDef recipe_forge
+{
+	"iron"						25
+	"copper"					5
+	"plastic"					2
+}
+
+entityDef recipe_smelter
+{
+	"iron"						20
+	"copper"					5
+	"plastic"					2
+}
+
+entityDef recipe_screw_driver
+{
+	"iron"						5
+	"plastic"					5
+}
+
+
+
+// ======================
+//		  Weapons
+// ======================
+
+
+
+
+
+
+// ======================
+//		Level Quests
+// ======================
+
+entityDef recipe_computer_case
+{
+	"iron"						25
+}
+
+entityDef recipe_server_rack
+{
+	"computer_case"				5
+}
+
+entityDef recipe_circuit_board
+{
+	"copper"					10
+	"plastic"					10
+}
+
+entityDef recipe_computer
+{
+	"computer_case"				1
+	"circuit_board"				5
+}
+
+entityDef server
+{
+	"computer"					5
+	"server_rack"				1
+}
+

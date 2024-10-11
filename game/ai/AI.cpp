@@ -1753,6 +1753,14 @@ void idAI::Killed( idEntity *inflictor, idEntity *attacker, int damage, const id
 		}
 		kv = spawnArgs.MatchPrefix( "def_drops", kv );
 	}
+
+	if (attacker != NULL && attacker->GetClassname() == "idPlayer" && (idStr::Cmpn(spawnArgs.GetString("classname"), "monster_", 8) == 0)) {
+		int choice = gameLocal.random.RandomInt(gameLocal.GetLocalPlayer()->inventory.blueprints.Num());
+		idStr bp = gameLocal.GetLocalPlayer()->inventory.blueprints[choice];
+
+		common->Printf("Dude dead. Give 1 %s", bp.c_str());
+		GiveStuffToPlayer(gameLocal.GetLocalPlayer(), bp.c_str(), "1");
+	}
 }
 
 /***********************************************************************

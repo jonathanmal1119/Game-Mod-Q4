@@ -269,6 +269,9 @@ public:
 	// Raw Materials
 	idDict materials;
 
+	// Blueprints
+	idList<idStr> blueprints;
+
 	// Custom Tools
 
 	bool					Welder;
@@ -809,26 +812,6 @@ public:
 	void					SetCash( float newCashAmount );
 	void					ResetCash();
 // RITUAL END
-
-	// Custom Functions
-	enum Materials {
-		iron,
-		copper,
-		plastic,
-	};
-
-	enum Recipies {
-		// Tools
-		Welder,
-		Hammer,
-		Forge,
-		Smelter,
-		Hand_Saw,
-
-		// Weapons
-
-		// Win Condition Items
-	};
 
 	void					Craft(const char* recipe, int amount);
 

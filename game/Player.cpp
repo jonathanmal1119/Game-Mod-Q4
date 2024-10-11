@@ -1347,7 +1347,10 @@ idPlayer::idPlayer() {
 //================================
 //		Setup Inital Materials
 //================================
-
+	//	Blueprints
+	inventory.blueprints.AddUnique(idStr("iron"));
+	inventory.blueprints.AddUnique(idStr("copper"));
+	inventory.blueprints.AddUnique(idStr("plastic"));
 
 	// T1
 	inventory.materials.Set("iron","0");

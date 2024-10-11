@@ -3062,6 +3062,26 @@ void Cmd_craft_f(const idCmdArgs& args) {
 	gameLocal.GetLocalPlayer()->Craft(args.Argv(1), atoi(args.Argv(2)));
 }
 
+void Cmd_unlock_f(const idCmdArgs& args) {
+	idStr arg = idStr(args.Argv(1));
+	const idDict* recipeDict = gameLocal.FindEntityDefDict(args.Argv(1), false);
+
+	if (!recipeDict) {
+		gameLocal.Warning("Unknown recipe '%s'", args.Argv(1));
+		return;
+	}
+	
+	gameLocal.GetLocalPlayer()->inventory.blueprints.AddUnique(idStr(arg.c_str(), 7, arg.Length()));
+}
+
+void Cmd_unlockbp_f(const idCmdArgs& args) {
+	common->Printf("Blueprints: \n");
+	for (int i = 0; i < gameLocal.GetLocalPlayer()->inventory.blueprints.Num();i++) {
+		idStr bp = gameLocal.GetLocalPlayer()->inventory.blueprints[i];
+		common->Printf("%s\n", bp.c_str());
+	}
+}
+
 
 /*
 =================
@@ -3262,6 +3282,7 @@ void idGameLocal::InitConsoleCommands( void ) {
 	
 	cmdSystem->AddCommand("listMats", Cmd_listMats_f, CMD_FL_GAME, "Buy an item (if in a buy zone and the game type supports it)");
 	cmdSystem->AddCommand("craft", Cmd_craft_f, CMD_FL_GAME, "Crafts X amount of an item. Syntax: craft <item> <amount>");
+	cmdSystem->AddCommand("unlock", Cmd_unlockbp_f, CMD_FL_GAME, "Unlocks recipe. Syntax: craft <recipe>");
 
 }
 

@@ -3082,6 +3082,13 @@ void Cmd_unlockbp_f(const idCmdArgs& args) {
 	}
 }
 
+void Cmd_guiupdate_f(const idCmdArgs& args) {
+	gameLocal.GetLocalPlayer()->hud->SetStateString("gain_item_txt", "Plastic +1");
+	gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("resetAddItemTime");
+}
+
+
+
 
 /*
 =================
@@ -3283,6 +3290,7 @@ void idGameLocal::InitConsoleCommands( void ) {
 	cmdSystem->AddCommand("listMats", Cmd_listMats_f, CMD_FL_GAME, "Buy an item (if in a buy zone and the game type supports it)");
 	cmdSystem->AddCommand("craft", Cmd_craft_f, CMD_FL_GAME, "Crafts X amount of an item. Syntax: craft <item> <amount>");
 	cmdSystem->AddCommand("unlock", Cmd_unlockbp_f, CMD_FL_GAME, "Unlocks recipe. Syntax: craft <recipe>");
+	cmdSystem->AddCommand("guitest", Cmd_guiupdate_f, CMD_FL_GAME, "Updates GUI");
 
 }
 

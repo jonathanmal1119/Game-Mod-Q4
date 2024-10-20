@@ -1347,10 +1347,18 @@ idPlayer::idPlayer() {
 //================================
 //		Setup Inital Materials
 //================================
+
 	//	Blueprints
 	inventory.blueprints.AddUnique(idStr("iron"));
 	inventory.blueprints.AddUnique(idStr("copper"));
 	inventory.blueprints.AddUnique(idStr("plastic"));
+
+	// Tools
+	inventory.materials.Set("tool_soldering_iron", "0");
+	inventory.materials.Set("tool_hammer", "0");
+	inventory.materials.Set("tool_forge", "0");
+	inventory.materials.Set("tool_smelter", "0");
+	inventory.materials.Set("tool_screw_driver", "0");
 
 	// T1
 	inventory.materials.Set("iron","0");
@@ -1365,6 +1373,7 @@ idPlayer::idPlayer() {
 	// T3
 	inventory.materials.Set("computer", "0");
 	inventory.materials.Set("server", "0");
+
 
 }
 
@@ -14106,12 +14115,39 @@ int idPlayer::CanSelectWeapon(const char* weaponName)
 void idPlayer::Craft(const char* recipe, int amount) {
 
 	const idDict* recipeDict = gameLocal.FindEntityDefDict(recipe, false);
+	idStr* recipeKey = new idStr(recipe, 7, strlen(recipe));
 
 	if (!recipeDict) {
-		gameLocal.Warning("Unknown recipeDef '%s'", recipe);
+		common->Printf("Unknown recipeDef '%s'\n", recipe);
 		return;
 	}
 
+	if (idStr::Cmpn(recipe, "recipe_tool_", 12) == 0) {
+		int hasTool;
+		inventory.materials.GetInt(recipeKey->c_str(), "0", hasTool);
+
+		if (hasTool) {
+			common->Printf("%s Already Unlocked!\n", recipe);
+			return;
+		}
+	}
+
+	// Check if player has Blueprint
+	bool hasBp = false;
+	for (int i = 0; i < gameLocal.GetLocalPlayer()->inventory.blueprints.Num(); i++) {
+		idStr bp = gameLocal.GetLocalPlayer()->inventory.blueprints[i];
+		if (idStr::Cmp(bp.c_str(), recipeKey->c_str()) == 0) {
+			hasBp = true;
+			break;
+		}
+	}
+
+	if (!hasBp) {
+		common->Printf("Does not have blueprint!\n");
+		return;
+	}
+
+	// Check if player can afford
 	for (int i = 0; i < recipeDict->GetNumKeyVals() - 1; i++) {
 
 		int val;
@@ -14120,20 +14156,37 @@ void idPlayer::Craft(const char* recipe, int amount) {
 		const idKeyValue* ingredient = recipeDict->GetKeyVal(i);
 		idStr key = ingredient->GetKey();
 
-		recipeDict->GetInt(key.c_str(),"0",val);
-		val *= amount;
-
-		invAmt = inventory.materials.GetInt(key.c_str());
-
-		// Can't Afford so exit
-		if (!(val <= invAmt)) {
+		if (amount <= 0) {
+			common->Printf("Cannot give 0 or negative amount.\n");
 			return;
 		}
+
+		if (idStr::Cmpn(key.c_str(), "tool_", 5) == 0) {
+			int hasTool;
+			inventory.materials.GetInt(key.c_str(), "0", hasTool);
+
+			if (hasTool == 0) {
+				common->Printf("%s not unlocked!\n", key.c_str());
+				return;
+			}
+		}
+		else {
+			recipeDict->GetInt(key.c_str(), "0", val);
+			val *= amount;
+
+			invAmt = inventory.materials.GetInt(key.c_str());
+
+			// Can't Afford so exit
+			if (!(val <= invAmt)) {
+				common->Printf("Not enough %s to craft %s\n",key.c_str(), recipe);
+				return;
+			}
+		}
+
 	}
 
 	// Can Afford so now transact
 	for (int i = 0; i < recipeDict->GetNumKeyVals() - 1; i++) {
-
 		int val;
 		int invAmt;
 
@@ -14143,20 +14196,66 @@ void idPlayer::Craft(const char* recipe, int amount) {
 		recipeDict->GetInt(key.c_str(), "0", val);
 		invAmt = inventory.materials.GetInt(key.c_str());
 
-		int newAmt = invAmt -= (val * amount);
-		inventory.materials.SetInt(key.c_str(), newAmt);
+		// If its not a tool
+		if (idStr::Cmpn(key.c_str(), "tool_", 5) == -1) {
+			int newAmt = invAmt -= (val * amount);
+			inventory.materials.SetInt(key.c_str(), newAmt);
+		}
 	}
 
-	idStr* recipeKey = new idStr(recipe, 7, strlen(recipe));
+	// If its a tool give 1
+	if (idStr::Cmpn(recipe, "recipe_tool_", 12) == 0) {
+		int hasTool;
 
-	int recipeAmt;
-	inventory.materials.GetInt(recipeKey->c_str(), "0", recipeAmt);
-	recipeAmt += amount;
+		inventory.materials.GetInt(recipeKey->c_str(), "0", hasTool);
+		if (hasTool) {
+			return;
+		}
+		else {
+			inventory.materials.SetInt(recipeKey->c_str(), 1);
+		}
+	}
+	else {
+		GiveStuffToPlayer(this, recipeKey->c_str(), idStr(amount).c_str());
+	}
 
-	inventory.materials.SetInt(recipeKey->c_str(), recipeAmt);
-
-	inventory.materials.GetInt(recipeKey->c_str(), "0", recipeAmt);
-	common->Printf("%s %s", recipeKey->c_str(), recipeAmt);
+	//Progress();
 }
+
+void idPlayer::Progress() {
+	int progress;
+	return;
+	switch (progression_tier) {
+		case 0:
+			inventory.materials.GetInt("computer_case", "0", progress);
+
+			if (progress == 1) {
+				inventory.materials.SetInt("computer_case", 0);
+			}
+			progression_tier = 1;
+			gameLocal.InitFromNewMap("game/waste.mp",gameRenderWorld,false,false,40);
+			break;
+		case 1:
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+	}
+}
+
+
+
+void idPlayer::BPUnlockProgress() {
+	return;
+	if (killAmountForNextTier == 0) {
+		killAmountForNextTier = 10;
+		
+	}
+
+}
+
 
 

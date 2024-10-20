@@ -538,6 +538,7 @@ void GiveStuffToPlayer( idPlayer* player, const char* name, const char* value )
 		testCond += atoi(value);
 		gameLocal.GetLocalPlayer()->inventory.materials.SetInt(name, testCond);
 		// TODO: Update HUD
+		player->Progress();
 		return;
 	}
 
@@ -3049,13 +3050,15 @@ void Cmd_ClientOverflowReliable_f( const idCmdArgs& args ) {
 #endif
 
 void Cmd_listMats_f(const idCmdArgs& args) {
-	for (int i = 0; i < gameLocal.GetLocalPlayer()->inventory.materials.GetNumKeyVals() - 1; i++) {
+	for (int i = 0; i < gameLocal.GetLocalPlayer()->inventory.materials.GetNumKeyVals(); i++) {
 		const idKeyValue* item = gameLocal.GetLocalPlayer()->inventory.materials.GetKeyVal(i);
 		idStr key = item->GetKey();
 		int amt;
 		gameLocal.GetLocalPlayer()->inventory.materials.GetInt(key.c_str(), "-1", amt);
 		common->Printf("%d %s\n",amt,key.c_str());
 	}
+
+	//common->Printf("\nTools:\nSoldering Iron %d\nHammer %d\nForge %d\nSmelter %d\nScrew Driver %d\n", gameLocal.GetLocalPlayer()->inventory.soldering_iron, gameLocal.GetLocalPlayer()->inventory.hammer, gameLocal.GetLocalPlayer()->inventory.forge, gameLocal.GetLocalPlayer()->inventory.smelter, gameLocal.GetLocalPlayer()->inventory.screw_driver);
 }
 
 void Cmd_craft_f(const idCmdArgs& args) {
@@ -3075,16 +3078,30 @@ void Cmd_unlock_f(const idCmdArgs& args) {
 }
 
 void Cmd_unlockbp_f(const idCmdArgs& args) {
-	common->Printf("Blueprints: \n");
-	for (int i = 0; i < gameLocal.GetLocalPlayer()->inventory.blueprints.Num();i++) {
-		idStr bp = gameLocal.GetLocalPlayer()->inventory.blueprints[i];
-		common->Printf("%s\n", bp.c_str());
+
+	if (args.Argc() == 0) {
+		common->Printf("Blueprints: \n");
+		for (int i = 0; i < gameLocal.GetLocalPlayer()->inventory.blueprints.Num(); i++) {
+			idStr bp = gameLocal.GetLocalPlayer()->inventory.blueprints[i];
+			common->Printf("%s\n", bp.c_str());
+		}
 	}
+	else {
+		gameLocal.GetLocalPlayer()->inventory.blueprints.AddUnique(idStr(args.Argv(1)));
+	}
+	
+	gameLocal.GetLocalPlayer()->inventory.blueprints.AddUnique(idStr("computer_case"));
+	
+	
 }
 
 void Cmd_guiupdate_f(const idCmdArgs& args) {
 	gameLocal.GetLocalPlayer()->hud->SetStateString("gain_item_txt", "Plastic +1");
 	gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("resetAddItemTime");
+}
+
+void Cmd_closeHelp_f(const idCmdArgs& args) {
+	gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("closeHelp");
 }
 
 
@@ -3286,11 +3303,11 @@ void idGameLocal::InitConsoleCommands( void ) {
 	cmdSystem->AddCommand( "buy",					Cmd_BuyItem_f,				CMD_FL_GAME,				"Buy an item (if in a buy zone and the game type supports it)" );
 // RITUAL END
 
-	
-	cmdSystem->AddCommand("listMats", Cmd_listMats_f, CMD_FL_GAME, "Buy an item (if in a buy zone and the game type supports it)");
+	//cmdSystem->AddCommand("closeHelp", Cmd_closeHelp_f, CMD_FL_GAME, "Closes the ingame help screen.");
+	cmdSystem->AddCommand("list", Cmd_listMats_f, CMD_FL_GAME, "Lits all materials and tools.");
 	cmdSystem->AddCommand("craft", Cmd_craft_f, CMD_FL_GAME, "Crafts X amount of an item. Syntax: craft <item> <amount>");
 	cmdSystem->AddCommand("unlock", Cmd_unlockbp_f, CMD_FL_GAME, "Unlocks recipe. Syntax: craft <recipe>");
-	cmdSystem->AddCommand("guitest", Cmd_guiupdate_f, CMD_FL_GAME, "Updates GUI");
+	//cmdSystem->AddCommand("guitest", Cmd_guiupdate_f, CMD_FL_GAME, "Updates GUI");
 
 }
 

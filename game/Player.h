@@ -266,6 +266,8 @@ public:
 	
 	int						secretAreasDiscovered;
 
+
+
 	// Raw Materials
 	idDict materials;
 
@@ -274,11 +276,11 @@ public:
 
 	// Custom Tools
 
-	bool					Welder;
-	bool					Hammer;
-	bool					Forge;
-	bool					Smelter;
-	bool					Hand_Saw;
+	bool					soldering_iron = false;
+	bool					hammer = false;
+	bool					forge = false;
+	bool					smelter = false;
+	bool					screw_driver = false;
 
 	// Custom Weapons
 
@@ -441,6 +443,13 @@ public:
 // squirrel: Mode-agnostic buymenus
 	float					buyMenuCash;
 // RITUAL END
+
+
+//Current Tier
+
+	int progression_tier = 0;
+	int killAmountForNextTier = 0;
+	
 
 public:
 	CLASS_PROTOTYPE( idPlayer );
@@ -814,6 +823,8 @@ public:
 // RITUAL END
 
 	void					Craft(const char* recipe, int amount);
+	void					Progress();
+	void					BPUnlockProgress();
 
 protected:
 	void					SetupHead( const char* modelKeyName = "", idVec3 headOffset = idVec3(0, 0, 0) );

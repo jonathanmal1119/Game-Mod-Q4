@@ -3,34 +3,34 @@
 //		   Tools
 // ======================
 
-entityDef recipe_soldering_iron
+entityDef recipe_tool_soldering_iron
 {
 	"iron"						5
 	"copper"					5
 	"plastic"					2
 }
 
-entityDef recipe_hammer
+entityDef recipe_tool_hammer
 {
 	"iron"						5
 	"plastic"					5
 }
 
-entityDef recipe_forge
+entityDef recipe_tool_forge
 {
 	"iron"						25
 	"copper"					5
 	"plastic"					2
 }
 
-entityDef recipe_smelter
+entityDef recipe_tool_smelter
 {
 	"iron"						20
 	"copper"					5
 	"plastic"					2
 }
 
-entityDef recipe_screw_driver
+entityDef recipe_tool_screw_driver
 {
 	"iron"						5
 	"plastic"					5
@@ -54,28 +54,41 @@ entityDef recipe_screw_driver
 entityDef recipe_computer_case
 {
 	"iron"						25
+
+	"tool_hammer"				1
+	"tool_smelter"				1
 }
 
 entityDef recipe_server_rack
 {
 	"computer_case"				5
+
+	"tool_hammer"				1
+	"tool_screw_driver"			1
 }
 
 entityDef recipe_circuit_board
 {
 	"copper"					10
 	"plastic"					10
+
+	"tool_smelter"				1
+	"tool_soldering_iron"		1
 }
 
 entityDef recipe_computer
 {
 	"computer_case"				1
 	"circuit_board"				5
+
+	"tool_screw_driver"			1
 }
 
 entityDef server
 {
 	"computer"					5
 	"server_rack"				1
+
+	"tool_screw_driver"			1
 }
 

@@ -31,6 +31,8 @@
 #include "NoGameTypeInfo.h"
 #endif
 
+void Cmd_listMats_f(const idCmdArgs& args);
+
 /*
 ==================
 Cmd_GetFloatArg
@@ -538,7 +540,9 @@ void GiveStuffToPlayer( idPlayer* player, const char* name, const char* value )
 		testCond += atoi(value);
 		gameLocal.GetLocalPlayer()->inventory.materials.SetInt(name, testCond);
 		// TODO: Update HUD
-		player->Progress();
+		//player->Progress();
+		const idCmdArgs args = idCmdArgs();
+		Cmd_listMats_f(args);
 		return;
 	}
 
@@ -546,6 +550,8 @@ void GiveStuffToPlayer( idPlayer* player, const char* name, const char* value )
 		gameLocal.Printf( "unknown item\n" );
 	}
 }
+
+
 
 /*
 ==================
@@ -3055,7 +3061,15 @@ void Cmd_listMats_f(const idCmdArgs& args) {
 		idStr key = item->GetKey();
 		int amt;
 		gameLocal.GetLocalPlayer()->inventory.materials.GetInt(key.c_str(), "-1", amt);
-		common->Printf("%d %s\n",amt,key.c_str());
+		common->Printf("%d %s | i:%d\n",amt,key.c_str(),i);
+
+		const char* msg;
+
+		idStr loc = idStr("inv_amt_txt");
+		loc.Append(idStr(i+1));
+		
+		
+		gameLocal.GetLocalPlayer()->hud->SetStateString(loc.c_str(),idStr(amt).c_str());
 	}
 
 	//common->Printf("\nTools:\nSoldering Iron %d\nHammer %d\nForge %d\nSmelter %d\nScrew Driver %d\n", gameLocal.GetLocalPlayer()->inventory.soldering_iron, gameLocal.GetLocalPlayer()->inventory.hammer, gameLocal.GetLocalPlayer()->inventory.forge, gameLocal.GetLocalPlayer()->inventory.smelter, gameLocal.GetLocalPlayer()->inventory.screw_driver);
@@ -3066,7 +3080,12 @@ void Cmd_craft_f(const idCmdArgs& args) {
 }
 
 
-void Cmd_unlockbp_f(const idCmdArgs& args) {
+void Cmd_listRecipes_f(const idCmdArgs& args) {
+
+	common->Printf("Recipes: \n recipe_computer_case | Cost: 10 iron Tools: Hammer, Smelter\n recipe_server_rack | Cost: 3 Computer Cases Tools: Hammer, Screw Driver\n recipe_circuit_board | Cost: 10 Copper, 10 Plastic Tools: Smelter, Soldering Iron\n recipe_computer | Cost: 1 Computer Case, 3 Circuit Boards Tools: Screw Driver\n recipe_server | Cost: 5 Computers, 1 Server Rack Tools: Screw Driver\n recipe_tool_soldering_iron | Cost: 5 Iron, 5 Copper, 2 Plastic\n recipe_tool_hammer | Cost: 5 Iron, 5 Plastic\n recipe_tool_forge | Cost: 10 Iron, 5 Copper, 2 Plastic\n recipe_tool_smelter | Cost: 15 Iron, 5 Copper, 2 Plastic\n recipe_tool_screw_driver | Cost: 5 Iron, 5 Plastic\n\n");
+}
+
+void Cmd_listBPs_f(const idCmdArgs& args) {
 
 	common->Printf("Blueprints: \n");
 	for (int i = 0; i < gameLocal.GetLocalPlayer()->inventory.blueprints.Num(); i++) {
@@ -3075,6 +3094,7 @@ void Cmd_unlockbp_f(const idCmdArgs& args) {
 	}
 	common->Printf("\n");
 }
+
 
 
 bool helpScreenEnabled = true;
@@ -3088,6 +3108,21 @@ void Cmd_toggleHelp_f(const idCmdArgs& args) {
 		helpScreenEnabled = true;
 	}
 	
+}
+
+bool invScreenEnabled = false;
+void Cmd_toggleInv_f(const idCmdArgs& args) {
+	if (invScreenEnabled) {
+		gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("hideInvScreen");
+		invScreenEnabled = false;
+	}
+	else {
+		Cmd_listMats_f(args);
+		gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("showInvScreen");
+		invScreenEnabled = true;
+		
+	}
+
 }
 
 
@@ -3290,9 +3325,14 @@ void idGameLocal::InitConsoleCommands( void ) {
 // RITUAL END
 
 	cmdSystem->AddCommand("toggleHelp", Cmd_toggleHelp_f, CMD_FL_GAME, "Toggles the ingame help screen.");
+	cmdSystem->AddCommand("toggleInv", Cmd_toggleInv_f, CMD_FL_GAME, "Toggles the inventory screen.");
 	cmdSystem->AddCommand("list", Cmd_listMats_f, CMD_FL_GAME, "Lits all materials and tools.");
+	//cmdSystem->AddCommand("unlock", Cmd_unlockbp_f, CMD_FL_GAME, "List all unlocked recipes.");
 	cmdSystem->AddCommand("craft", Cmd_craft_f, CMD_FL_GAME, "Crafts X amount of an item. Syntax: craft <item> <amount>");
-	cmdSystem->AddCommand("unlock", Cmd_unlockbp_f, CMD_FL_GAME, "Unlocks recipe. Syntax: craft <recipe>");
+
+	cmdSystem->AddCommand("listRecipes", Cmd_listRecipes_f, CMD_FL_GAME, "List all unlocked recipes.");
+	cmdSystem->AddCommand("listBlueprints", Cmd_listBPs_f, CMD_FL_GAME, "List all unlocked recipes.");
+	
 }
 
 /*

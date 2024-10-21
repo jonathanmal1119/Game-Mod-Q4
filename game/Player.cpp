@@ -1355,23 +1355,16 @@ idPlayer::idPlayer() {
 //================================
 
 	//	Blueprints To Unlock
-	inventory.blueprintsToUnlock.AddUnique(idStr("tool_soldering_iron"));
-	inventory.blueprintsToUnlock.AddUnique(idStr("tool_hammer"));
-	inventory.blueprintsToUnlock.AddUnique(idStr("tool_forge"));
-	inventory.blueprintsToUnlock.AddUnique(idStr("tool_smelter"));
-	inventory.blueprintsToUnlock.AddUnique(idStr("tool_screw_driver"));
 	inventory.blueprintsToUnlock.AddUnique(idStr("computer_case"));
 	inventory.blueprintsToUnlock.AddUnique(idStr("server_rack"));
 	inventory.blueprintsToUnlock.AddUnique(idStr("circuit_board"));
 	inventory.blueprintsToUnlock.AddUnique(idStr("computer"));
 	inventory.blueprintsToUnlock.AddUnique(idStr("server"));
-
-	// Tools
-	inventory.materials.Set("tool_soldering_iron", "0");
-	inventory.materials.Set("tool_hammer", "0");
-	inventory.materials.Set("tool_forge", "0");
-	inventory.materials.Set("tool_smelter", "0");
-	inventory.materials.Set("tool_screw_driver", "0");
+	inventory.blueprintsToUnlock.AddUnique(idStr("tool_soldering_iron"));
+	inventory.blueprintsToUnlock.AddUnique(idStr("tool_hammer"));
+	inventory.blueprintsToUnlock.AddUnique(idStr("tool_forge"));
+	inventory.blueprintsToUnlock.AddUnique(idStr("tool_smelter"));
+	inventory.blueprintsToUnlock.AddUnique(idStr("tool_screw_driver"));
 
 	// T1
 	inventory.materials.Set("iron","0");
@@ -1386,6 +1379,13 @@ idPlayer::idPlayer() {
 	// T3
 	inventory.materials.Set("computer", "0");
 	inventory.materials.Set("server", "0");
+
+	// Tools
+	inventory.materials.Set("tool_soldering_iron", "0");
+	inventory.materials.Set("tool_hammer", "0");
+	inventory.materials.Set("tool_forge", "0");
+	inventory.materials.Set("tool_smelter", "0");
+	inventory.materials.Set("tool_screw_driver", "0");
 
 }
 
@@ -14266,6 +14266,7 @@ void idPlayer::Progress() {
 void idPlayer::BPUnlockProgress() {
 	killCount--;
 	idStr msg;
+	gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("hideStartingKillTarget");
 	sprintf(msg, "Kills left for BP: %d", killCount);
 	gameLocal.GetLocalPlayer()->hud->SetStateString("kill_target_txt", msg);
 

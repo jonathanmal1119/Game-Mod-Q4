@@ -469,6 +469,9 @@ void idInventory::Save( idSaveGame *savefile ) const {
 	savefile->WriteInt( secretAreasDiscovered );
 
 	savefile->WriteSyncId();
+
+	// Save Materials bewteen saves
+	savefile->WriteDict(&materials);
 }
 
 /*
@@ -560,6 +563,9 @@ void idInventory::Restore( idRestoreGame *savefile ) {
 	savefile->ReadInt( secretAreasDiscovered );
 
 	savefile->ReadSyncId( "idInventory::Restore" );
+
+	// Read saved Materials
+	savefile->ReadDict(&materials);
 }
 
 /*
@@ -3012,6 +3018,21 @@ void idPlayer::SavePersistantInfo( void ) {
 	inventory.GetPersistantData( playerInfo );
 	playerInfo.SetInt( "health", health );
 	playerInfo.SetInt( "current_weapon", currentWeapon );
+
+}
+
+void idPlayer::GetCustomInvData(idDict &dict) {
+	
+	for (int i = 0; i < inventory.materials.GetNumKeyVals(); i++) {
+
+		const idKeyValue* item = gameLocal.GetLocalPlayer()->inventory.materials.GetKeyVal(i);
+		idStr key = item->GetKey();
+
+		int amt;
+		gameLocal.GetLocalPlayer()->inventory.materials.GetInt(key.c_str(), "-1", amt);
+
+		dict.SetInt(key.c_str(), amt);
+	}
 }
 
 /*
@@ -14111,6 +14132,14 @@ int idPlayer::CanSelectWeapon(const char* weaponName)
 }
 
 // RITUAL END
+
+void idPlayer::UpdateMaterialHUD(const char* material, int amount) {
+	idStr(amount).c_str();
+
+	idStr msg = material + idStr(" +") + idStr(amount);
+	gameLocal.GetLocalPlayer()->hud->SetStateString("gain_item_txt", msg.c_str());
+	gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("resetAddItemTime");
+}
 
 void idPlayer::Craft(const char* recipe, int amount) {
 

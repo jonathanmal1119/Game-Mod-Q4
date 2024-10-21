@@ -825,6 +825,8 @@ public:
 	void					Craft(const char* recipe, int amount);
 	void					Progress();
 	void					BPUnlockProgress();
+	void					UpdateMaterialHUD(const char* material, int amount);
+	void					GetCustomInvData(idDict& dict);
 
 protected:
 	void					SetupHead( const char* modelKeyName = "", idVec3 headOffset = idVec3(0, 0, 0) );

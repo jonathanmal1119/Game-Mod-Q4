@@ -3065,17 +3065,6 @@ void Cmd_craft_f(const idCmdArgs& args) {
 	gameLocal.GetLocalPlayer()->Craft(args.Argv(1), atoi(args.Argv(2)));
 }
 
-void Cmd_unlock_f(const idCmdArgs& args) {
-	idStr arg = idStr(args.Argv(1));
-	const idDict* recipeDict = gameLocal.FindEntityDefDict(args.Argv(1), false);
-
-	if (!recipeDict) {
-		gameLocal.Warning("Unknown recipe '%s'", args.Argv(1));
-		return;
-	}
-	
-	gameLocal.GetLocalPlayer()->inventory.blueprints.AddUnique(idStr(arg.c_str(), 7, arg.Length()));
-}
 
 void Cmd_unlockbp_f(const idCmdArgs& args) {
 
@@ -3095,13 +3084,18 @@ void Cmd_unlockbp_f(const idCmdArgs& args) {
 	
 }
 
-void Cmd_guiupdate_f(const idCmdArgs& args) {
-	gameLocal.GetLocalPlayer()->hud->SetStateString("gain_item_txt", "Plastic +1");
-	gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("resetAddItemTime");
-}
 
-void Cmd_closeHelp_f(const idCmdArgs& args) {
-	gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("closeHelp");
+bool helpScreenEnabled = true;
+void Cmd_toggleHelp_f(const idCmdArgs& args) {
+	if (helpScreenEnabled) {
+		gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("hideHelpScreen");
+		helpScreenEnabled = false;
+	}
+	else {
+		gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("openHelpScreen");
+		helpScreenEnabled = true;
+	}
+	
 }
 
 
@@ -3303,12 +3297,10 @@ void idGameLocal::InitConsoleCommands( void ) {
 	cmdSystem->AddCommand( "buy",					Cmd_BuyItem_f,				CMD_FL_GAME,				"Buy an item (if in a buy zone and the game type supports it)" );
 // RITUAL END
 
-	//cmdSystem->AddCommand("closeHelp", Cmd_closeHelp_f, CMD_FL_GAME, "Closes the ingame help screen.");
+	cmdSystem->AddCommand("toggleHelp", Cmd_toggleHelp_f, CMD_FL_GAME, "Toggles the ingame help screen.");
 	cmdSystem->AddCommand("list", Cmd_listMats_f, CMD_FL_GAME, "Lits all materials and tools.");
 	cmdSystem->AddCommand("craft", Cmd_craft_f, CMD_FL_GAME, "Crafts X amount of an item. Syntax: craft <item> <amount>");
 	cmdSystem->AddCommand("unlock", Cmd_unlockbp_f, CMD_FL_GAME, "Unlocks recipe. Syntax: craft <recipe>");
-	//cmdSystem->AddCommand("guitest", Cmd_guiupdate_f, CMD_FL_GAME, "Updates GUI");
-
 }
 
 /*

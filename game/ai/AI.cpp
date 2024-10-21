@@ -1760,6 +1760,8 @@ void idAI::Killed( idEntity *inflictor, idEntity *attacker, int damage, const id
 
 		common->Printf("Dude dead. Give 1 %s", bp.c_str());
 		GiveStuffToPlayer(gameLocal.GetLocalPlayer(), bp.c_str(), "1");
+	
+		gameLocal.GetLocalPlayer()->UpdateMaterialHUD(bp.c_str(),1);
 	}
 }
 

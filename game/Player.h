@@ -273,14 +273,7 @@ public:
 
 	// Blueprints
 	idList<idStr> blueprints;
-
-	// Custom Tools
-
-	bool					soldering_iron = false;
-	bool					hammer = false;
-	bool					forge = false;
-	bool					smelter = false;
-	bool					screw_driver = false;
+	idList<idStr> blueprintsToUnlock;
 
 	// Custom Weapons
 
@@ -447,8 +440,8 @@ public:
 
 //Current Tier
 
-	int progression_tier = 0;
-	int killAmountForNextTier = 0;
+	int killTarget = 5;
+	int killCount = 5;
 	
 
 public:

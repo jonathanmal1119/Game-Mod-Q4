@@ -84,7 +84,7 @@ entityDef recipe_computer
 	"tool_screw_driver"			1
 }
 
-entityDef server
+entityDef recipe_server
 {
 	"computer"					5
 	"server_rack"				1

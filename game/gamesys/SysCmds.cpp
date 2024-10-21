@@ -3068,20 +3068,12 @@ void Cmd_craft_f(const idCmdArgs& args) {
 
 void Cmd_unlockbp_f(const idCmdArgs& args) {
 
-	if (args.Argc() == 0) {
-		common->Printf("Blueprints: \n");
-		for (int i = 0; i < gameLocal.GetLocalPlayer()->inventory.blueprints.Num(); i++) {
-			idStr bp = gameLocal.GetLocalPlayer()->inventory.blueprints[i];
-			common->Printf("%s\n", bp.c_str());
-		}
+	common->Printf("Blueprints: \n");
+	for (int i = 0; i < gameLocal.GetLocalPlayer()->inventory.blueprints.Num(); i++) {
+		idStr bp = gameLocal.GetLocalPlayer()->inventory.blueprints[i];
+		common->Printf("%s\n", bp.c_str());
 	}
-	else {
-		gameLocal.GetLocalPlayer()->inventory.blueprints.AddUnique(idStr(args.Argv(1)));
-	}
-	
-	gameLocal.GetLocalPlayer()->inventory.blueprints.AddUnique(idStr("computer_case"));
-	
-	
+	common->Printf("\n");
 }
 
 

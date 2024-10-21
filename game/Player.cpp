@@ -1354,10 +1354,17 @@ idPlayer::idPlayer() {
 //		Setup Inital Materials
 //================================
 
-	//	Blueprints
-	inventory.blueprints.AddUnique(idStr("iron"));
-	inventory.blueprints.AddUnique(idStr("copper"));
-	inventory.blueprints.AddUnique(idStr("plastic"));
+	//	Blueprints To Unlock
+	inventory.blueprintsToUnlock.AddUnique(idStr("tool_soldering_iron"));
+	inventory.blueprintsToUnlock.AddUnique(idStr("tool_hammer"));
+	inventory.blueprintsToUnlock.AddUnique(idStr("tool_forge"));
+	inventory.blueprintsToUnlock.AddUnique(idStr("tool_smelter"));
+	inventory.blueprintsToUnlock.AddUnique(idStr("tool_screw_driver"));
+	inventory.blueprintsToUnlock.AddUnique(idStr("computer_case"));
+	inventory.blueprintsToUnlock.AddUnique(idStr("server_rack"));
+	inventory.blueprintsToUnlock.AddUnique(idStr("circuit_board"));
+	inventory.blueprintsToUnlock.AddUnique(idStr("computer"));
+	inventory.blueprintsToUnlock.AddUnique(idStr("server"));
 
 	// Tools
 	inventory.materials.Set("tool_soldering_iron", "0");
@@ -1379,7 +1386,6 @@ idPlayer::idPlayer() {
 	// T3
 	inventory.materials.Set("computer", "0");
 	inventory.materials.Set("server", "0");
-
 
 }
 
@@ -14252,38 +14258,39 @@ void idPlayer::Craft(const char* recipe, int amount) {
 }
 
 void idPlayer::Progress() {
-	int progress;
 	return;
-	switch (progression_tier) {
-		case 0:
-			inventory.materials.GetInt("computer_case", "0", progress);
-
-			if (progress == 1) {
-				inventory.materials.SetInt("computer_case", 0);
-			}
-			progression_tier = 1;
-			gameLocal.InitFromNewMap("game/waste.mp",gameRenderWorld,false,false,40);
-			break;
-		case 1:
-			break;
-		case 2:
-			break;
-		case 3:
-			break;
-		case 4:
-			break;
-	}
 }
 
 
 
 void idPlayer::BPUnlockProgress() {
-	return;
-	if (killAmountForNextTier == 0) {
-		killAmountForNextTier = 10;
-		
-	}
+	killCount--;
+	idStr msg;
+	sprintf(msg, "Kills left for BP: %d", killCount);
+	gameLocal.GetLocalPlayer()->hud->SetStateString("kill_target_txt", msg);
 
+	if (killCount == 0 && inventory.blueprintsToUnlock.Num() > 0) {
+		killCount = killTarget;
+		int choice = gameLocal.random.RandomInt(gameLocal.GetLocalPlayer()->inventory.blueprintsToUnlock.Num());
+		idStr bp = gameLocal.GetLocalPlayer()->inventory.blueprintsToUnlock[choice];
+		inventory.blueprintsToUnlock.RemoveIndex(choice);
+
+		inventory.blueprints.AddUnique(bp);
+
+		sprintf(msg, "Kills left for BP: %d", killTarget);
+		gameLocal.GetLocalPlayer()->hud->SetStateString("kill_target_txt", msg.c_str());
+
+		sprintf(msg, "%s Unlocked!", bp.c_str());
+		gameLocal.GetLocalPlayer()->hud->SetStateString("unlocked_screen_txt", msg.c_str());
+		gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("showUnlockedScreen");
+	}
+	else if (inventory.blueprintsToUnlock.Num() == 0) {
+
+		gameLocal.GetLocalPlayer()->hud->SetStateString("unlocked_screen_txt", "Everything Unlocked!");
+		gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("showUnlockedScreen");
+
+		gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("hideKillTarget");
+	}
 }
 
 

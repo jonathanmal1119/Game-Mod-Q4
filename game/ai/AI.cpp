@@ -1755,13 +1755,23 @@ void idAI::Killed( idEntity *inflictor, idEntity *attacker, int damage, const id
 	}
 
 	if (attacker != NULL && attacker->GetClassname() == "idPlayer" && (idStr::Cmpn(spawnArgs.GetString("classname"), "monster_", 8) == 0)) {
-		int choice = gameLocal.random.RandomInt(gameLocal.GetLocalPlayer()->inventory.blueprints.Num());
-		idStr bp = gameLocal.GetLocalPlayer()->inventory.blueprints[choice];
+		//int choice = gameLocal.random.RandomInt(gameLocal.GetLocalPlayer()->inventory.blueprints.Num());
+		//idStr bp = gameLocal.GetLocalPlayer()->inventory.blueprints[choice];
+		const char* bp;
 
-		common->Printf("Dude dead. Give 1 %s", bp.c_str());
-		GiveStuffToPlayer(gameLocal.GetLocalPlayer(), bp.c_str(), "1");
+		int choice = gameLocal.random.RandomInt(3);
+		if (choice == 0)
+			bp = "iron";
+		else if (choice == 1)
+			bp = "copper";
+		else
+			bp = "plastic";
+
+		common->Printf("+1 %s\n", bp);
+		GiveStuffToPlayer(gameLocal.GetLocalPlayer(), bp, "1");
 	
-		gameLocal.GetLocalPlayer()->UpdateMaterialHUD(bp.c_str(),1);
+		gameLocal.GetLocalPlayer()->UpdateMaterialHUD(bp,1);
+		gameLocal.GetLocalPlayer()->BPUnlockProgress();
 	}
 }
 

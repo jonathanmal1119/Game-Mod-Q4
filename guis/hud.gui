@@ -448,9 +448,21 @@ windowDef Desktop
 		set "kill_target::visible" "0";
 	}
 
+	onNamedEvent hideStartingKillTarget {
+		set "starting_kill_target::visible" "0";
+	}
+
 	onNamedEvent showUnlockedScreen {
 		resetTime "unlocked_screen" "0";
 		set "unlocked_screen::visible" "1";
+	}
+
+	onNamedEvent showInvScreen {
+		set "inv_screen::visible" "1";
+	}
+
+	onNamedEvent hideInvScreen {
+		set "inv_screen::visible" "0";
 	}
 
 	windowDef speed
@@ -2402,13 +2414,91 @@ windowDef Desktop
 	windowDef help_screen
 	{
 		rect	131,68,367,313
-		visible	0
-		backcolor	0.741,0.741,0.741,1
+		visible	1
+		backcolor	0.501,0.501,0.501,1
 		bordersize	2
 		bordercolor	0,0,0,1
-		forecolor	1,1,1,1
-		text	"Help Screen"
-		textscale	0.4
+		windowDef help_screen_exit_txt
+		{
+			rect	61,289,250,22
+			visible	1
+			forecolor	1,1,1,1
+			text	"(x) to Toggle Help Screen"
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef help_screen_txt
+		{
+			rect	2,26,367,21
+			visible	1
+			forecolor	1,1,1,1
+			text	"Objective:"
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef help_screen_txt1
+		{
+			rect	2,76,367,21
+			visible	1
+			forecolor	1,1,1,1
+			text	"Blueprints:"
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef help_screen_txt2
+		{
+			rect	6,95,272,37
+			visible	1
+			forecolor	1,1,1,1
+			text	"Unlock a blueprint every 5 enemies killed. 10 Total blueprints to unlock."
+			textscale	0.2
+			font	"fonts/marine"
+		}
+		windowDef help_screen_txt3
+		{
+			rect	2,151,367,21
+			visible	1
+			forecolor	1,1,1,1
+			text	"Crafting:"
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef help_screen_txt4
+		{
+			rect	6,170,334,50
+			visible	1
+			forecolor	1,1,1,1
+			text	"To craft run the command:   craft <recipe> <amount> To see all recipes and their costs run the command listRecipes"
+			textscale	0.2
+			font	"fonts/marine"
+		}
+		windowDef help_screen_txt5
+		{
+			rect	6,43,352,30
+			visible	1
+			forecolor	1,1,1,1
+			text	"Craft the current level's target item to progress Tiers. 5 Tiers total"
+			textscale	0.2
+			font	"fonts/marine"
+		}
+		windowDef help_screen_top_text
+		{
+			rect	91,-7,185,34
+			visible	1
+			forecolor	1,1,1,1
+			text	"Help Screen"
+			textscale	0.5
+			font	"fonts/marine"
+		}
+		windowDef help_screen_txt2
+		{
+			rect	1,122,361,16
+			visible	1
+			forecolor	1,1,1,1
+			text	" To see all Blueprints run the command listBlueprints"
+			textscale	0.2
+			font	"fonts/marine"
+		}
 	}
 	windowDef kill_target
 	{
@@ -2416,6 +2506,15 @@ windowDef Desktop
 		visible	1
 		forecolor	1,1,1,1
 		text	"gui::kill_target_txt"
+		textscale	0.4
+		font	"fonts/marine"
+	}
+	windowDef starting_kill_target
+	{
+		rect	0,0,400,26
+		visible	1
+		forecolor	1,1,1,1
+		text	"Kills left for BP: 5"
 		textscale	0.4
 		font	"fonts/marine"
 	}
@@ -2436,5 +2535,256 @@ windowDef Desktop
 			set "unlocked_screen::visible" "0";
 		}
 
+	}
+	windowDef inv_screen
+	{
+		rect	2,86,220,320
+		visible	0
+		backcolor	0.501,0.501,0.501,1
+		bordersize	2
+		bordercolor	0,0,0,1
+		windowDef inv_iron
+		{
+			rect	40,0,175,20
+			visible	1
+			forecolor	1,1,1,1
+			text	"Iron"
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef inv_copper
+		{
+			rect	40,20,175,20
+			visible	1
+			forecolor	1,1,1,1
+			text	"Copper"
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef inv_plastic
+		{
+			rect	40,40,175,20
+			visible	1
+			forecolor	1,1,1,1
+			text	"Plastic "
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef inv_computer_case
+		{
+			rect	40,60,175,19
+			visible	1
+			forecolor	1,1,1,1
+			text	"Computer Cases"
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef inv_server_rack
+		{
+			rect	40,80,175,20
+			visible	1
+			forecolor	1,1,1,1
+			text	"Server Racks"
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef inv_circuit_board
+		{
+			rect	40,100,175,20
+			visible	1
+			forecolor	1,1,1,1
+			text	"Ciircuit Boards"
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef inv_computer
+		{
+			rect	40,120,175,19
+			visible	1
+			forecolor	1,1,1,1
+			text	"Computers"
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef inv_server
+		{
+			rect	40,140,175,19
+			visible	1
+			forecolor	1,1,1,1
+			text	"Servers"
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef inv_soldering_iron
+		{
+			rect	40,180,175,19
+			visible	1
+			forecolor	1,1,1,1
+			text	"Soldering Iron"
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef inv_hammer
+		{
+			rect	40,200,175,19
+			visible	1
+			forecolor	1,1,1,1
+			text	"Hammer"
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef inv_forge
+		{
+			rect	40,220,175,19
+			visible	1
+			forecolor	1,1,1,1
+			text	"Forge"
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef inv_smelter
+		{
+			rect	40,240,175,19
+			visible	1
+			forecolor	1,1,1,1
+			text	"Smelter"
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef inv_screw_driver
+		{
+			rect	40,260,175,19
+			visible	1
+			forecolor	1,1,1,1
+			text	"Screw Driver"
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef inv_amt1
+		{
+			rect	0,0,40,20
+			visible	1
+			forecolor	1,1,1,1
+			text	"gui::inv_amt_txt1"
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef inv_amt2
+		{
+			rect	0,21,40,20
+			visible	1
+			forecolor	1,1,1,1
+			text	"gui::inv_amt_txt2"
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef inv_amt3
+		{
+			rect	0,40,40,20
+			visible	1
+			forecolor	1,1,1,1
+			text	"gui::inv_amt_txt3"
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef inv_amt4
+		{
+			rect	0,60,40,20
+			visible	1
+			forecolor	1,1,1,1
+			text	"gui::inv_amt_txt4"
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef inv_amt5
+		{
+			rect	0,80,40,20
+			visible	1
+			forecolor	1,1,1,1
+			text	"gui::inv_amt_txt5"
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef inv_amt6
+		{
+			rect	0,100,40,20
+			visible	1
+			forecolor	1,1,1,1
+			text	"gui::inv_amt_txt6"
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef inv_amt7
+		{
+			rect	0,120,40,20
+			visible	1
+			forecolor	1,1,1,1
+			text	"gui::inv_amt_txt7"
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef inv_amt8
+		{
+			rect	0,140,40,20
+			visible	1
+			forecolor	1,1,1,1
+			text	"gui::inv_amt_txt8"
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef inv_amt9
+		{
+			rect	0,180,40,20
+			visible	1
+			forecolor	1,1,1,1
+			text	"gui::inv_amt_txt9"
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef inv_amt10
+		{
+			rect	0,200,40,20
+			visible	1
+			forecolor	1,1,1,1
+			text	"gui::inv_amt_txt10"
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef inv_amt11
+		{
+			rect	0,220,40,20
+			visible	1
+			forecolor	1,1,1,1
+			text	"gui::inv_amt_txt11"
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef inv_amt12
+		{
+			rect	0,240,40,20
+			visible	1
+			forecolor	1,1,1,1
+			text	"gui::inv_amt_txt12"
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef inv_amt13
+		{
+			rect	0,260,40,20
+			visible	1
+			forecolor	1,1,1,1
+			text	"gui::inv_amt_txt13"
+			textscale	0.3
+			font	"fonts/marine"
+		}
+		windowDef inv_exit_txt
+		{
+			rect	0,293,212,27
+			visible	1
+			forecolor	1,1,1,1
+			text	"(i) to toggle Inventory"
+			textscale	0.3
+			font	"fonts/marine"
+		}
 	}
 }

@@ -465,6 +465,10 @@ windowDef Desktop
 		set "inv_screen::visible" "0";
 	}
 
+	onNamedEvent hideObjBaseScreen {
+		set "objective_start_txt::visible" "0";
+	}
+
 	windowDef speed
 	{
 		rect	550,70,80,20
@@ -2447,10 +2451,10 @@ windowDef Desktop
 		}
 		windowDef help_screen_txt2
 		{
-			rect	6,95,272,37
+			rect	6,122,361,16
 			visible	1
 			forecolor	1,1,1,1
-			text	"Unlock a blueprint every 5 enemies killed. 10 Total blueprints to unlock."
+			text	"There are 15 blueprints (5 Items, 5 Tools, 5 Weapons)."
 			textscale	0.2
 			font	"fonts/marine"
 		}
@@ -2474,10 +2478,10 @@ windowDef Desktop
 		}
 		windowDef help_screen_txt5
 		{
-			rect	6,43,352,30
+			rect	6,43,309,30
 			visible	1
 			forecolor	1,1,1,1
-			text	"Craft the current level's target item to progress Tiers. 5 Tiers total"
+			text	"Craft the current target item to progress Tiers. 5 Tiers total"
 			textscale	0.2
 			font	"fonts/marine"
 		}
@@ -2490,9 +2494,27 @@ windowDef Desktop
 			textscale	0.5
 			font	"fonts/marine"
 		}
-		windowDef help_screen_txt2
+		windowDef help_screen_txt6
 		{
-			rect	1,122,361,16
+			rect	6,96,361,16
+			visible	1
+			forecolor	1,1,1,1
+			text	"To craft anything you need the blueprint unlocked."
+			textscale	0.2
+			font	"fonts/marine"
+		}
+		windowDef help_screen_txt7
+		{
+			rect	6,109,361,16
+			visible	1
+			forecolor	1,1,1,1
+			text	"A new blueprint is unlocked after every 5 kills."
+			textscale	0.2
+			font	"fonts/marine"
+		}
+		windowDef help_screen_txt8
+		{
+			rect	1,135,361,16
 			visible	1
 			forecolor	1,1,1,1
 			text	" To see all Blueprints run the command listBlueprints"
@@ -2786,5 +2808,35 @@ windowDef Desktop
 			textscale	0.3
 			font	"fonts/marine"
 		}
+	}
+	windowDef objective_base
+	{
+		rect	343,-1,291,26
+		visible	1
+		forecolor	1,1,1,1
+		text	"Current Level Objective"
+		textscale	0.4
+		font	"fonts/marine"
+		textalign	2
+	}
+	windowDef objective_txt
+	{
+		rect	343,24,291,26
+		visible	1
+		forecolor	1,1,1,1
+		text	"gui::objective_txt"
+		textscale	0.4
+		font	"fonts/marine"
+		textalign	1
+	}
+	windowDef objective_start_txt
+	{
+		rect	343,24,291,26
+		visible	1
+		forecolor	1,1,1,1
+		text	"1 Computer Case"
+		textscale	0.4
+		font	"fonts/marine"
+		textalign	1
 	}
 }

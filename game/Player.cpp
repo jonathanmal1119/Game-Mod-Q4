@@ -14254,10 +14254,44 @@ void idPlayer::Craft(const char* recipe, int amount) {
 		GiveStuffToPlayer(this, recipeKey->c_str(), idStr(amount).c_str());
 	}
 
-	//Progress();
+	Progress();
 }
 
 void idPlayer::Progress() {
+
+	switch (progress_tier) {
+		case 0:
+			if (inventory.materials.GetInt("computer_case", "0") >= 1) {
+				gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("hideObjBaseScreen");
+				progress_tier++;
+				gameLocal.GetLocalPlayer()->hud->SetStateString("objective_txt", "1 Server Rack");
+			}
+			break;
+		case 1:
+			if (inventory.materials.GetInt("server_rack", "0") >= 1) {
+				progress_tier++;
+				gameLocal.GetLocalPlayer()->hud->SetStateString("objective_txt", "1 Circuit Board");
+			}
+			break;
+		case 2:
+			if (inventory.materials.GetInt("circuit_board", "0") >= 1) {
+				progress_tier++;
+				gameLocal.GetLocalPlayer()->hud->SetStateString("objective_txt", "1 Computer");
+			}
+			break;
+		case 3:
+			if (inventory.materials.GetInt("computer", "0") >= 1) {
+				progress_tier++;
+				gameLocal.GetLocalPlayer()->hud->SetStateString("objective_txt", "1 Server");
+			}
+			break;
+		case 4:
+			if (inventory.materials.GetInt("server", "0") >= 1) {
+				progress_tier++;
+				gameLocal.GetLocalPlayer()->hud->SetStateString("objective_txt", "Complete!");
+			}
+			break;
+	}
 	return;
 }
 

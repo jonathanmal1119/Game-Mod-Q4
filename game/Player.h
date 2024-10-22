@@ -442,6 +442,8 @@ public:
 
 	int killTarget = 5;
 	int killCount = 5;
+
+	int progress_tier = 0;
 	
 
 public:

@@ -539,8 +539,7 @@ void GiveStuffToPlayer( idPlayer* player, const char* name, const char* value )
 	if (testCond >= 0) {
 		testCond += atoi(value);
 		gameLocal.GetLocalPlayer()->inventory.materials.SetInt(name, testCond);
-		// TODO: Update HUD
-		//player->Progress();
+		player->Progress();
 		const idCmdArgs args = idCmdArgs();
 		Cmd_listMats_f(args);
 		return;
@@ -3061,13 +3060,12 @@ void Cmd_listMats_f(const idCmdArgs& args) {
 		idStr key = item->GetKey();
 		int amt;
 		gameLocal.GetLocalPlayer()->inventory.materials.GetInt(key.c_str(), "-1", amt);
-		common->Printf("%d %s | i:%d\n",amt,key.c_str(),i);
+		//common->Printf("%d %s | i:%d\n",amt,key.c_str(),i);
 
 		const char* msg;
 
 		idStr loc = idStr("inv_amt_txt");
 		loc.Append(idStr(i+1));
-		
 		
 		gameLocal.GetLocalPlayer()->hud->SetStateString(loc.c_str(),idStr(amt).c_str());
 	}
@@ -3120,7 +3118,6 @@ void Cmd_toggleInv_f(const idCmdArgs& args) {
 		Cmd_listMats_f(args);
 		gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("showInvScreen");
 		invScreenEnabled = true;
-		
 	}
 
 }

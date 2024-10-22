@@ -36,91 +36,23 @@ To see all recipes and their costs run the command 'listRecipes' or see below.
 Recipes:
 
 Tools:
-Soldering Iron
-	5 iron
-	5 copper
-	2 plastic
-Hammer
-	5 Iron
-	5 plastic
-Forge
-	10 iron
-	5 copper
-	2 plastic
-Smelter
-	15 Iron
-	5 copper
-	2 plastic
-Screw Driver
-	5 iron
-	5 plastic
+- recipe_tool_soldering_iron: 5 iron, 5 copper, 2 plastic
+- recipe_tool_hammer: 5 Iron, 5 plastic
+- recipe_tool_forge: 10 iron, 5 copper, 2 plastic
+- recipe_tool_smelter: 15 Iron, 5 copper, 2 plastic
+- recipe_tool_screw_driver: 5 iron, 5 plastic
 
 Items:
-Computer Case
-	Cost
-		10 Iron
-	Required Tools
-		Hammer
-		Smelter
-Server Rack
-	Cost
-		3 Computer Cases
-	Required Tools
-		Hammer
-		Screw Driver
-Circuit Board
-	Cost
-		10 Copper
-		10 Plastic
-	Required Tools
-		Smelter
-		Soldering Iron
-Computer
-	Cost
-		1 Computer Case
-		3 Circuit Boards
-	Required Tools
-		Screw Driver
-Server
-	Cost
-		3 Computers
-		1 Server Rack
-	Required Tools
-		Hammer
-		Screw Driver
+- recipe_computer_case: 10 Iron | Required Tools: Hammer, Smelter
+- recipe_server_rack: 3 Computer Cases | Required Tools: Hammer, Screw Driver
+- recipe_circuit_board: 10 Copper, 10 Plastic | Required Tools: Smelter, Soldering Iron
+- recipe_computer: 1 Computer Case, 3 Circuit Boards| Requireed Tools: Screw Driver
+- recipe_computer: 3 Computers, 1 Server Rack | Required Tools: Hammer, Screw Driver
 
 Weapons:
-Rifle
-	Cost
-		10 Iron
-		5 copper
-		2 plastic
-	Required Tools
-		Forge
-Rebar Gun
-	Cost
-		10 Iron
-		2 Plastic
-	Required Tools
-		Forge
-Spike Launcher
-	Cost
-		12 Iron
-		5 Copper
-		2 Plastic
-	Required Tools
-		Forge
-Staplegun
-	Cost
-		10 Iron
-		5 Copper
-		2 Plastic
-	Required Tools
-		Forge
-Server (T3)
-	Cost
-		5 Iron
-		2 Plastic
-	Required Tools
-		Forge
+- recipe_rifle: 10 Iron, 5 copper, 2 plastic | Required Tools: Forge
+- recipe_rebar_gun: 10 Iron, 2 Plastic | Required Tools: Forge
+- recipe_spike_launcher: 12 Iron, 5 Copper, 2 Plastic | Required Tools: Forge
+- recipe_staplegun: 10 Iron, 5 Copper, 2 Plastic | Required Tools: Forge
+- recipe_noblisk: 5 Iron, 2 Plastic | Required Tools: Forge
 

@@ -587,6 +587,12 @@ public:
 
 	void					InitNonPersistentSpawnArgs		( void );	
 
+	bool					effectActive = false;
+	int						effectCounter = 0;
+	int						effectType = 0; // 1 | Stun
+
+	void					Event_EffectEnd(int type);
+
 	/*
 	===============================================================================
 									Speaking & Chatter

@@ -1243,6 +1243,26 @@ void idAI::Think( void ) {
 	if ( ai_speeds.GetBool ( ) ) {
 		aiManager.timerThink.Stop ( );
 	}
+
+	if (effectActive) {
+		effectCounter--;
+		common->Printf("%d\n", effectCounter);
+		if (effectCounter == 0) {
+			effectActive = false;
+			Event_EffectEnd(effectType);
+		}
+	}
+
+}
+
+void idAI::Event_EffectEnd(int type) {
+	switch (type) {
+		case 1: // Stun
+			common->Printf("Become Active.\n", effectCounter);
+			BecomeActive(TH_THINK);
+			effectType = 0;
+			break;
+	}
 }
 
 /*
@@ -1534,6 +1554,38 @@ idAI::Pain
 =====================
 */
 bool idAI::Pain( idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location ) {
+	
+	//common->Printf("Took Damage: %d\n", attacker->IsType(gameLocal.GetLocalPlayer()->GetClassType()));
+
+	if (attacker->IsType(gameLocal.GetLocalPlayer()->GetClassType())) {
+		int gun = gameLocal.GetLocalPlayer()->GetCurrentWeapon();
+		switch (gun) {
+			case 0: // Blaster | Staplegun???
+
+				break;
+			case 1: // Machinegun | Rifle
+				common->Printf("Damaged by Rifle.\n");
+				break;
+			case 2: // Shotgun
+				break;
+			case 3: // Hyperblaster
+				break;
+			case 5: // Nailgun | Stun Rebar
+				if (effectCounter == 0) {
+					const idDict* recipeDict = gameLocal.FindEntityDefDict("srg_stun_def", false);
+
+					effectActive = true;
+					effectType = 1;
+					effectCounter = recipeDict->GetInt("stunLength","0"); // Change to entityDef val
+					BecomeInactive(TH_THINK);
+				}
+				break;
+			case 7: // Railgun | Spike Launcher
+				common->Printf("Damaged by SpikeLauncher.\n"); // Switch to killed
+				break;
+		}
+	}
+
 	aifl.pain   = idActor::Pain( inflictor, attacker, damage, dir, location );
 	aifl.damage = true;
 

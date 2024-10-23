@@ -444,6 +444,8 @@ public:
 	int killCount = 5;
 
 	int progress_tier = 0;
+
+	idList<idProjectile*> bombs;
 	
 
 public:

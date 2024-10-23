@@ -1138,6 +1138,11 @@ void idProjectile::Explode( const trace_t *collision, const bool showExplodeFX, 
 	idVec3		normal, endpos;
 	int			removeTime;
 
+	if (!canExplode) {
+		gameLocal.GetLocalPlayer()->bombs.AddUnique(this);
+		return;
+	}
+
 	if ( state == EXPLODED || state == FIZZLED ) {
 		return;
 	}

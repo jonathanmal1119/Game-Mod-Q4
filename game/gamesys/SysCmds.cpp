@@ -3122,6 +3122,14 @@ void Cmd_toggleInv_f(const idCmdArgs& args) {
 
 }
 
+void Cmd_Explode_f(const idCmdArgs& args) {
+	for (int i = 0; i < gameLocal.GetLocalPlayer()->bombs.Num(); i++) {
+		gameLocal.GetLocalPlayer()->bombs[i]->canExplode = true;
+		gameLocal.GetLocalPlayer()->bombs[i]->Explode(NULL, true);
+	}
+	gameLocal.GetLocalPlayer()->bombs.Clear();
+}
+
 
 
 
@@ -3329,6 +3337,8 @@ void idGameLocal::InitConsoleCommands( void ) {
 
 	cmdSystem->AddCommand("listRecipes", Cmd_listRecipes_f, CMD_FL_GAME, "List all unlocked recipes.");
 	cmdSystem->AddCommand("listBlueprints", Cmd_listBPs_f, CMD_FL_GAME, "List all unlocked recipes.");
+
+	cmdSystem->AddCommand("explodeBombs", Cmd_Explode_f, CMD_FL_GAME, "Explodes all Noblisks.");
 	
 }
 

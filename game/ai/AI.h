@@ -590,6 +590,8 @@ public:
 	bool					effectActive = false;
 	int						effectCounter = 0;
 	int						effectType = 0; // 1 | Stun
+	int						effectInterval = 0;
+	int						effectDamageAmt = 0;
 
 	void					Event_EffectEnd(int type);
 

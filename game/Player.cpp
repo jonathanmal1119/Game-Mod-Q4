@@ -1366,6 +1366,12 @@ idPlayer::idPlayer() {
 	inventory.blueprintsToUnlock.AddUnique(idStr("tool_smelter"));
 	inventory.blueprintsToUnlock.AddUnique(idStr("tool_screw_driver"));
 
+	inventory.blueprintsToUnlock.AddUnique(idStr("weapon_rifle"));
+	inventory.blueprintsToUnlock.AddUnique(idStr("weapon_stun_rebar_gun"));
+	inventory.blueprintsToUnlock.AddUnique(idStr("weapon_spike_launcher"));
+	inventory.blueprintsToUnlock.AddUnique(idStr("weapon_staplegun"));
+	inventory.blueprintsToUnlock.AddUnique(idStr("weapon_noblisk_launcher"));
+
 	// T1
 	inventory.materials.Set("iron","0");
 	inventory.materials.Set("copper", "0");
@@ -14254,6 +14260,25 @@ void idPlayer::Craft(const char* recipe, int amount) {
 		else {
 			inventory.materials.SetInt(recipeKey->c_str(), 1);
 		}
+	}
+	else if (idStr::Cmpn(recipe, "recipe_weapon_", 14) == 0) {
+		
+		if (idStr::FindText(recipe, "rifle") > -1) {
+			GiveStuffToPlayer(this, "weapon_machinegun", "1");
+		}
+		else if (idStr::FindText(recipe, "stun_rebar_gun") > -1) {
+			GiveStuffToPlayer(this, "weapon_nailgun", "1");
+		}
+		else if (idStr::FindText(recipe, "spike_launcher") > -1) {
+			GiveStuffToPlayer(this, "weapon_railgun", "1");
+		}
+		else if (idStr::FindText(recipe, "staplegun") > -1) {
+			GiveStuffToPlayer(this, "weapon_shotgun", "1");
+		}
+		else if (idStr::FindText(recipe, "noblisk_launcher") > -1) {
+			GiveStuffToPlayer(this, "weapon_grenadelauncher", "1");
+		}
+
 	}
 	else {
 		GiveStuffToPlayer(this, recipeKey->c_str(), idStr(amount).c_str());

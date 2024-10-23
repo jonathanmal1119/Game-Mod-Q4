@@ -1246,8 +1246,14 @@ void idAI::Think( void ) {
 
 	if (effectActive) {
 		effectCounter--;
-		common->Printf("%d\n", effectCounter);
-		if (effectCounter == 0) {
+		common->Printf("HP: %d\n", health);
+		if (effectType == 2) {
+			if (effectCounter % effectInterval == 0) {
+				//common->Printf("Count: %d", effectCounter);
+				Damage(NULL, NULL, idVec3(), "damage_bleed", 1, 0);
+			}
+		}
+		if (effectCounter <= 0) {
 			effectActive = false;
 			Event_EffectEnd(effectType);
 		}
@@ -1262,6 +1268,10 @@ void idAI::Event_EffectEnd(int type) {
 			BecomeActive(TH_THINK);
 			effectType = 0;
 			break;
+		case 2: // Bleed
+			effectType = 0;
+			break;
+
 	}
 }
 
@@ -1555,8 +1565,6 @@ idAI::Pain
 */
 bool idAI::Pain( idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location ) {
 	
-	//common->Printf("Took Damage: %d\n", attacker->IsType(gameLocal.GetLocalPlayer()->GetClassType()));
-
 	if (attacker->IsType(gameLocal.GetLocalPlayer()->GetClassType())) {
 		int gun = gameLocal.GetLocalPlayer()->GetCurrentWeapon();
 		switch (gun) {
@@ -1564,7 +1572,17 @@ bool idAI::Pain( idEntity *inflictor, idEntity *attacker, int damage, const idVe
 
 				break;
 			case 1: // Machinegun | Rifle
-				common->Printf("Damaged by Rifle.\n");
+				if (effectCounter == 0) {
+					common->Printf("Damaged by Rifle.\n");
+					const idDict* recipeDict = gameLocal.FindEntityDefDict("rifle_bleed_def", false);
+
+					
+					effectType = 2;
+					effectCounter = recipeDict->GetInt("bleedLength", "0");
+					//effectDamageAmt = recipeDict->GetInt("bleedAmount", "0");
+					effectInterval = recipeDict->GetInt("bleedIncrement", "0");
+					effectActive = true;
+				}
 				break;
 			case 2: // Shotgun
 				break;
@@ -1574,9 +1592,9 @@ bool idAI::Pain( idEntity *inflictor, idEntity *attacker, int damage, const idVe
 				if (effectCounter == 0) {
 					const idDict* recipeDict = gameLocal.FindEntityDefDict("srg_stun_def", false);
 
-					effectActive = true;
 					effectType = 1;
-					effectCounter = recipeDict->GetInt("stunLength","0"); // Change to entityDef val
+					effectCounter = recipeDict->GetInt("stunLength","0");
+					effectActive = true;
 					BecomeInactive(TH_THINK);
 				}
 				break;

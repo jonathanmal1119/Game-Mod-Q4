@@ -42,7 +42,7 @@ entityDef recipe_tool_screw_driver
 //		  Weapons
 // ======================
 
-entityDef recipe_rifle
+entityDef recipe_weapon_rifle
 {
 	"iron"						10
 	"copper"					5
@@ -51,7 +51,7 @@ entityDef recipe_rifle
 	"tool_forge"				1
 }
 
-entityDef recipe_stun_rebar_gun
+entityDef recipe_weapon_stun_rebar_gun
 {
 	"iron"						10
 	"plastic"					2
@@ -59,7 +59,7 @@ entityDef recipe_stun_rebar_gun
 	"tool_forge"				1
 }
 
-entityDef recipe_spike_launcher
+entityDef recipe_weapon_spike_launcher
 {
 	"iron"						12
 	"copper"					5
@@ -68,7 +68,7 @@ entityDef recipe_spike_launcher
 	"tool_forge"				1
 }
 
-entityDef recipe_staplegun
+entityDef recipe_weapon_staplegun
 {
 	"iron"						10
 	"copper"					5
@@ -77,7 +77,7 @@ entityDef recipe_staplegun
 	"tool_forge"				1
 }
 
-entityDef recipe_noblisk_launcher
+entityDef recipe_weapon_noblisk_launcher
 {
 	"iron"						5
 	"plastic"					2

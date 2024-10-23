@@ -1138,7 +1138,7 @@ void idProjectile::Explode( const trace_t *collision, const bool showExplodeFX, 
 	idVec3		normal, endpos;
 	int			removeTime;
 
-	if (!canExplode) {
+	if (!canExplode && gameLocal.GetLocalPlayer()->GetCurrentWeapon() == 4) {
 		gameLocal.GetLocalPlayer()->bombs.AddUnique(this);
 		return;
 	}

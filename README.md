@@ -51,8 +51,8 @@ Items:
 
 Weapons:
 - recipe_rifle: 10 Iron, 5 copper, 2 plastic | Required Tools: Forge
-- recipe_rebar_gun: 10 Iron, 2 Plastic | Required Tools: Forge
+- recipe_stun_rebar_gun: 10 Iron, 2 Plastic | Required Tools: Forge
 - recipe_spike_launcher: 12 Iron, 5 Copper, 2 Plastic | Required Tools: Forge
 - recipe_staplegun: 10 Iron, 5 Copper, 2 Plastic | Required Tools: Forge
-- recipe_noblisk: 5 Iron, 2 Plastic | Required Tools: Forge
+- recipe_noblisk_launcher: 5 Iron, 2 Plastic | Required Tools: Forge
 

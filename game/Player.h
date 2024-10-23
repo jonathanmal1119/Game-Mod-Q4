@@ -821,6 +821,7 @@ public:
 	void					Progress();
 	void					BPUnlockProgress();
 	void					UpdateMaterialHUD(const char* material, int amount);
+	void					UpdateItemObjectiveHUD(int tier);
 	void					GetCustomInvData(idDict& dict);
 
 protected:

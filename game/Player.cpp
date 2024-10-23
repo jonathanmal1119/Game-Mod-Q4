@@ -1354,12 +1354,12 @@ idPlayer::idPlayer() {
 //		Setup Inital Materials
 //================================
 
-	//	Blueprints To Unlock
+	// Blueprints To Unlock
 	inventory.blueprintsToUnlock.AddUnique(idStr("computer_case"));
-	inventory.blueprintsToUnlock.AddUnique(idStr("server_rack"));
-	inventory.blueprintsToUnlock.AddUnique(idStr("circuit_board"));
-	inventory.blueprintsToUnlock.AddUnique(idStr("computer"));
-	inventory.blueprintsToUnlock.AddUnique(idStr("server"));
+	//inventory.blueprintsToUnlock.AddUnique(idStr("server_rack"));
+	//inventory.blueprintsToUnlock.AddUnique(idStr("circuit_board"));
+	//inventory.blueprintsToUnlock.AddUnique(idStr("computer"));
+	//inventory.blueprintsToUnlock.AddUnique(idStr("server"));
 	inventory.blueprintsToUnlock.AddUnique(idStr("tool_soldering_iron"));
 	inventory.blueprintsToUnlock.AddUnique(idStr("tool_hammer"));
 	inventory.blueprintsToUnlock.AddUnique(idStr("tool_forge"));
@@ -14147,6 +14147,11 @@ void idPlayer::UpdateMaterialHUD(const char* material, int amount) {
 	gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("resetAddItemTime");
 }
 
+void UpdateItemObjectiveHUD(int tier) {
+	idStr msg;
+	gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("updateItemObj");
+}
+
 void idPlayer::Craft(const char* recipe, int amount) {
 
 	const idDict* recipeDict = gameLocal.FindEntityDefDict(recipe, false);
@@ -14265,24 +14270,40 @@ void idPlayer::Progress() {
 				gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("hideObjBaseScreen");
 				progress_tier++;
 				gameLocal.GetLocalPlayer()->hud->SetStateString("objective_txt", "1 Server Rack");
+				inventory.blueprints.AddUnique(idStr("server_rack"));
+
+				gameLocal.GetLocalPlayer()->hud->SetStateString("unlocked_screen_txt", "server_rack Unlocked!");
+				gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("showUnlockedScreen");
 			}
 			break;
 		case 1:
 			if (inventory.materials.GetInt("server_rack", "0") >= 1) {
 				progress_tier++;
 				gameLocal.GetLocalPlayer()->hud->SetStateString("objective_txt", "1 Circuit Board");
+				inventory.blueprints.AddUnique(idStr("circuit_board"));
+
+				gameLocal.GetLocalPlayer()->hud->SetStateString("unlocked_screen_txt", "circuit_board Unlocked!");
+				gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("showUnlockedScreen");
 			}
 			break;
 		case 2:
 			if (inventory.materials.GetInt("circuit_board", "0") >= 1) {
 				progress_tier++;
 				gameLocal.GetLocalPlayer()->hud->SetStateString("objective_txt", "1 Computer");
+				inventory.blueprints.AddUnique(idStr("computer"));
+
+				gameLocal.GetLocalPlayer()->hud->SetStateString("unlocked_screen_txt", "computer Unlocked!");
+				gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("showUnlockedScreen");
 			}
 			break;
 		case 3:
 			if (inventory.materials.GetInt("computer", "0") >= 1) {
 				progress_tier++;
 				gameLocal.GetLocalPlayer()->hud->SetStateString("objective_txt", "1 Server");
+				inventory.blueprints.AddUnique(idStr("server"));
+
+				gameLocal.GetLocalPlayer()->hud->SetStateString("unlocked_screen_txt", "server Unlocked!");
+				gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("showUnlockedScreen");
 			}
 			break;
 		case 4:

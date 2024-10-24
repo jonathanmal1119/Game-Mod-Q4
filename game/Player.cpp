@@ -14299,6 +14299,7 @@ void idPlayer::Progress() {
 
 				gameLocal.GetLocalPlayer()->hud->SetStateString("unlocked_screen_txt", "server_rack Unlocked!");
 				gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("showUnlockedScreen");
+				inventory.materials.SetInt("computer_case", inventory.materials.GetInt("computer_case", "0") - 1);
 			}
 			break;
 		case 1:
@@ -14309,6 +14310,7 @@ void idPlayer::Progress() {
 
 				gameLocal.GetLocalPlayer()->hud->SetStateString("unlocked_screen_txt", "circuit_board Unlocked!");
 				gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("showUnlockedScreen");
+				inventory.materials.SetInt("server_rack", inventory.materials.GetInt("server_rack", "0") - 1);
 			}
 			break;
 		case 2:
@@ -14319,6 +14321,7 @@ void idPlayer::Progress() {
 
 				gameLocal.GetLocalPlayer()->hud->SetStateString("unlocked_screen_txt", "computer Unlocked!");
 				gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("showUnlockedScreen");
+				inventory.materials.SetInt("circuit_board", inventory.materials.GetInt("circuit_board", "0") - 1);
 			}
 			break;
 		case 3:
@@ -14329,12 +14332,14 @@ void idPlayer::Progress() {
 
 				gameLocal.GetLocalPlayer()->hud->SetStateString("unlocked_screen_txt", "server Unlocked!");
 				gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("showUnlockedScreen");
+				inventory.materials.SetInt("computer", inventory.materials.GetInt("computer", "0") - 1);
 			}
 			break;
 		case 4:
 			if (inventory.materials.GetInt("server", "0") >= 1) {
 				progress_tier++;
 				gameLocal.GetLocalPlayer()->hud->SetStateString("objective_txt", "Complete!");
+				inventory.materials.SetInt("server", inventory.materials.GetInt("server", "0") - 1);
 			}
 			break;
 	}

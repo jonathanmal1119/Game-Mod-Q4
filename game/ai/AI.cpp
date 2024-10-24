@@ -1829,12 +1829,14 @@ void idAI::Killed( idEntity *inflictor, idEntity *attacker, int damage, const id
 
 		common->Printf("+1 %s\n", bp);
 		GiveStuffToPlayer(gameLocal.GetLocalPlayer(), bp, "1");
-
+		common->Printf("Weapon: %d\n", gameLocal.GetLocalPlayer()->GetCurrentWeapon());
 		// Life Steal Perk
-		const idDict* recipeDict = gameLocal.FindEntityDefDict("spike_lifesteal_def", false);
-		int stealAmt = recipeDict->GetInt("stealAmt", "0");
+		if (gameLocal.GetLocalPlayer()->GetCurrentWeapon() == 7) {
+			const idDict* recipeDict = gameLocal.FindEntityDefDict("spike_lifesteal_def", false);
+			int stealAmt = recipeDict->GetInt("stealAmt", "0");
 
-		gameLocal.GetLocalPlayer()->health += stealAmt;
+			gameLocal.GetLocalPlayer()->health += stealAmt;
+		}
 		// END life steal perk
 
 

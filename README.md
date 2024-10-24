@@ -27,6 +27,8 @@ To craft anything you need the blueprint unlocked.
 A new blueprint is unlocked after every 5 kills.
 There are 15 blueprints (5 Items, 5 Tools, 5 Weapons).
 
+To see all unlocked blueprints run the command 'listBlueprints'.
+
 Crafting:
 To craft run the 'craft' Command.
 Syntax: craft <recipe> <amount> 
@@ -46,7 +48,7 @@ Items:
 - recipe_computer_case: 10 Iron | Required Tools: Hammer, Smelter
 - recipe_server_rack: 3 Computer Cases | Required Tools: Hammer, Screw Driver
 - recipe_circuit_board: 10 Copper, 10 Plastic | Required Tools: Smelter, Soldering Iron
-- recipe_computer: 1 Computer Case, 3 Circuit Boards| Requireed Tools: Screw Driver
+- recipe_computer: 1 Computer Case, 3 Circuit Boards | Required Tools: Screw Driver
 - recipe_computer: 3 Computers, 1 Server Rack | Required Tools: Hammer, Screw Driver
 
 Weapons:

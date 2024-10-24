@@ -12,6 +12,13 @@ How to get the mod Running:
 
 How to See the features of the Mod.
 
+5 Features
+  1. 5 Craftable Tools
+  2. 5 Level Progression Mechanic
+  3. Monsters drop loot
+  4. 5 Custom Weapons
+  5. Unlocking Blueprints
+
 Objectives:
 Craft the current level's target item to progress Tiers. 
 5 Tiers total

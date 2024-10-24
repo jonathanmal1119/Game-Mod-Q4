@@ -1,7 +1,7 @@
 How to get the mod Running:
 1. Download the repository.
 2. Create a mod folder within your Quake 4 game folder.
-3. Copy the pak001.pk4 file from the repository into the mod folder.
+3. Copy the pak001.pk4 file from the pack folder in the repository into the mod folder.
 4. Copy Quake4Config.cfg from the configs folder in the repository. 
 5. Copy game000.pk4 file from q4base.
 6. Open it with 7.zip or equivalent program.

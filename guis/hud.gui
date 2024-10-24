@@ -444,6 +444,10 @@ windowDef Desktop
 		set "ViewComments::visible" "0";
 	}
 
+	onNamedEvent showKillTarget {
+		set "kill_target::visible" "1";
+	}
+
 	onNamedEvent hideKillTarget {
 		set "kill_target::visible" "0";
 	}

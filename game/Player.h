@@ -269,12 +269,14 @@ public:
 
 
 	// Raw Materials
-	idDict materials;
+	idDict					materials;
 
 	// Blueprints
-	idList<idStr> blueprints;
-	idList<idStr> blueprintsToUnlock;
+	idList<idStr>			blueprints;
+	idList<idStr>			blueprintsToUnlock;
 
+	bool					hasAllBPs = false;
+				
 	// Custom Weapons
 
 };

@@ -471,7 +471,7 @@ void idInventory::Save( idSaveGame *savefile ) const {
 	savefile->WriteSyncId();
 
 	// Save Materials bewteen saves
-	savefile->WriteDict(&materials);
+	//savefile->WriteDict(&materials);
 }
 
 /*
@@ -565,7 +565,7 @@ void idInventory::Restore( idRestoreGame *savefile ) {
 	savefile->ReadSyncId( "idInventory::Restore" );
 
 	// Read saved Materials
-	savefile->ReadDict(&materials);
+	//savefile->ReadDict(&materials);
 }
 
 /*
@@ -14344,33 +14344,36 @@ void idPlayer::Progress() {
 
 
 void idPlayer::BPUnlockProgress() {
-	killCount--;
-	idStr msg;
-	gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("hideStartingKillTarget");
-	sprintf(msg, "Kills left for BP: %d", killCount);
-	gameLocal.GetLocalPlayer()->hud->SetStateString("kill_target_txt", msg);
+	if (!inventory.hasAllBPs) {
+		killCount--;
+		idStr msg;
+		gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("hideStartingKillTarget");
+		sprintf(msg, "Kills left for BP: %d", killCount);
+		gameLocal.GetLocalPlayer()->hud->SetStateString("kill_target_txt", msg);
 
-	if (killCount == 0 && inventory.blueprintsToUnlock.Num() > 0) {
-		killCount = killTarget;
-		int choice = gameLocal.random.RandomInt(gameLocal.GetLocalPlayer()->inventory.blueprintsToUnlock.Num());
-		idStr bp = gameLocal.GetLocalPlayer()->inventory.blueprintsToUnlock[choice];
-		inventory.blueprintsToUnlock.RemoveIndex(choice);
+		if (killCount == 0 && inventory.blueprintsToUnlock.Num() > 0) {
+			killCount = killTarget;
+			int choice = gameLocal.random.RandomInt(gameLocal.GetLocalPlayer()->inventory.blueprintsToUnlock.Num());
+			idStr bp = gameLocal.GetLocalPlayer()->inventory.blueprintsToUnlock[choice];
+			inventory.blueprintsToUnlock.RemoveIndex(choice);
 
-		inventory.blueprints.AddUnique(bp);
+			inventory.blueprints.AddUnique(bp);
 
-		sprintf(msg, "Kills left for BP: %d", killTarget);
-		gameLocal.GetLocalPlayer()->hud->SetStateString("kill_target_txt", msg.c_str());
+			sprintf(msg, "Kills left for BP: %d", killTarget);
+			gameLocal.GetLocalPlayer()->hud->SetStateString("kill_target_txt", msg.c_str());
 
-		sprintf(msg, "%s Unlocked!", bp.c_str());
-		gameLocal.GetLocalPlayer()->hud->SetStateString("unlocked_screen_txt", msg.c_str());
-		gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("showUnlockedScreen");
-	}
-	else if (inventory.blueprintsToUnlock.Num() == 0) {
+			sprintf(msg, "%s Unlocked!", bp.c_str());
+			gameLocal.GetLocalPlayer()->hud->SetStateString("unlocked_screen_txt", msg.c_str());
+			gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("showUnlockedScreen");
+		}
+		else if (inventory.blueprintsToUnlock.Num() == 0) {
 
-		gameLocal.GetLocalPlayer()->hud->SetStateString("unlocked_screen_txt", "Everything Unlocked!");
-		gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("showUnlockedScreen");
+			gameLocal.GetLocalPlayer()->hud->SetStateString("unlocked_screen_txt", "Everything Unlocked!");
+			gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("showUnlockedScreen");
 
-		gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("hideKillTarget");
+			gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("hideKillTarget");
+			inventory.hasAllBPs = true;
+		}
 	}
 }
 

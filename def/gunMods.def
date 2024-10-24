@@ -5,7 +5,7 @@
 
 entityDef srg_stun_def
 {
-	"stunLength"				300
+	"stunLength"				200
 }
 
 
@@ -24,4 +24,13 @@ entityDef damage_bleed
 {
 	"inherit"							"damage_monster_base"
 	"damage"							"2"
+}
+
+// ======================
+//	   Spike Launcher
+// ======================
+
+entityDef spike_lifesteal_def
+{
+	"stealAmt"							"25"
 }

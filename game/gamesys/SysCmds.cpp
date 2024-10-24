@@ -3080,17 +3080,17 @@ void Cmd_craft_f(const idCmdArgs& args) {
 
 void Cmd_listRecipes_f(const idCmdArgs& args) {
 
-	common->Printf("Recipes: \n recipe_computer_case | Cost: 10 iron Tools: Hammer, Smelter\n recipe_server_rack | Cost: 3 Computer Cases Tools: Hammer, Screw Driver\n recipe_circuit_board | Cost: 10 Copper, 10 Plastic Tools: Smelter, Soldering Iron\n recipe_computer | Cost: 1 Computer Case, 3 Circuit Boards Tools: Screw Driver\n recipe_server | Cost: 5 Computers, 1 Server Rack Tools: Screw Driver\n recipe_tool_soldering_iron | Cost: 5 Iron, 5 Copper, 2 Plastic\n recipe_tool_hammer | Cost: 5 Iron, 5 Plastic\n recipe_tool_forge | Cost: 10 Iron, 5 Copper, 2 Plastic\n recipe_tool_smelter | Cost: 15 Iron, 5 Copper, 2 Plastic\n recipe_tool_screw_driver | Cost: 5 Iron, 5 Plastic\n\n");
+	common->Printf("Recipes: \n recipe_computer_case | Cost: 10 iron Tools: Hammer, Smelter\n recipe_server_rack | Cost: 3 Computer Cases Tools: Hammer, Screw Driver\n recipe_circuit_board | Cost: 10 Copper, 10 Plastic Tools: Smelter, Soldering Iron\n recipe_computer | Cost: 1 Computer Case, 3 Circuit Boards Tools: Screw Driver\n recipe_server | Cost: 5 Computers, 1 Server Rack Tools: Screw Driver\n recipe_tool_soldering_iron | Cost: 5 Iron, 5 Copper, 2 Plastic\n recipe_tool_hammer | Cost: 5 Iron, 5 Plastic\n recipe_tool_forge | Cost: 10 Iron, 5 Copper, 2 Plastic\n recipe_tool_smelter | Cost: 15 Iron, 5 Copper, 2 Plastic\n recipe_tool_screw_driver | Cost: 5 Iron, 5 Plastic\n recipe_weapon_rifle| Cost: 10 Iron, 5 Copper, 2 Plastic Tools: Forge\n recipe_weapon_stun_rebar_gun| Cost: 10 Iron, 2 Plastic Tools: Forge\n recipe_weapon_spike_launcher| Cost: 12 Iron, 5 Copper, 2 Plastic Tools: Forge\n recipe_weapon_staplegun| Cost: 10 Iron, 5 Copper, 2 Plastic Tools: Forge\n recipe_weapon_noblisk_launcher| Cost: 10 Iron, 5 Copper, 2 Plastic Tools: Forge\n\n");
 }
 
 void Cmd_listBPs_f(const idCmdArgs& args) {
 
-	common->Printf("Blueprints: \n");
+	common->Printf("\nBlueprints: %d/15\n\n", gameLocal.GetLocalPlayer()->inventory.blueprints.Num());
 	for (int i = 0; i < gameLocal.GetLocalPlayer()->inventory.blueprints.Num(); i++) {
 		idStr bp = gameLocal.GetLocalPlayer()->inventory.blueprints[i];
 		common->Printf("%s\n", bp.c_str());
 	}
-	common->Printf("\n");
+	common->Printf("\n\n");
 }
 
 

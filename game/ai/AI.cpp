@@ -1246,14 +1246,12 @@ void idAI::Think( void ) {
 
 	if (effectActive) {
 		effectCounter--;
-		common->Printf("HP: %d\n", health);
 		if (effectType == 2) {
 			if (effectCounter % effectInterval == 0) {
-				//common->Printf("Count: %d", effectCounter);
 				Damage(NULL, NULL, idVec3(), "damage_bleed", 1, 0);
 			}
 		}
-		if (effectCounter <= 0) {
+		if (effectCounter <= 0 ) {
 			effectActive = false;
 			Event_EffectEnd(effectType);
 		}
@@ -1264,7 +1262,7 @@ void idAI::Think( void ) {
 void idAI::Event_EffectEnd(int type) {
 	switch (type) {
 		case 1: // Stun
-			common->Printf("Become Active.\n", effectCounter);
+			common->Printf("\nActivate\n");
 			BecomeActive(TH_THINK);
 			effectType = 0;
 			break;
@@ -1568,26 +1566,23 @@ bool idAI::Pain( idEntity *inflictor, idEntity *attacker, int damage, const idVe
 	if (attacker->IsType(gameLocal.GetLocalPlayer()->GetClassType())) {
 		int gun = gameLocal.GetLocalPlayer()->GetCurrentWeapon();
 		switch (gun) {
-			case 0: // Blaster | Staplegun???
 
-				break;
 			case 1: // Machinegun | Rifle
 				if (effectCounter == 0) {
-					common->Printf("Damaged by Rifle.\n");
 					const idDict* recipeDict = gameLocal.FindEntityDefDict("rifle_bleed_def", false);
 
 					
 					effectType = 2;
 					effectCounter = recipeDict->GetInt("bleedLength", "0");
-					//effectDamageAmt = recipeDict->GetInt("bleedAmount", "0");
 					effectInterval = recipeDict->GetInt("bleedIncrement", "0");
 					effectActive = true;
 				}
 				break;
 			case 2: // Shotgun
+				//Teleport(GetChestPosition(), GetDeltaViewAngles(), gameLocal.GetLocalPlayer());
+				BecomeInactive(TH_THINK);
 				break;
-			case 3: // Hyperblaster
-				break;
+
 			case 5: // Nailgun | Stun Rebar
 				if (effectCounter == 0) {
 					const idDict* recipeDict = gameLocal.FindEntityDefDict("srg_stun_def", false);
@@ -1597,9 +1592,6 @@ bool idAI::Pain( idEntity *inflictor, idEntity *attacker, int damage, const idVe
 					effectActive = true;
 					BecomeInactive(TH_THINK);
 				}
-				break;
-			case 7: // Railgun | Spike Launcher
-				common->Printf("Damaged by SpikeLauncher.\n"); // Switch to killed
 				break;
 		}
 	}
@@ -1825,8 +1817,6 @@ void idAI::Killed( idEntity *inflictor, idEntity *attacker, int damage, const id
 	}
 
 	if (attacker != NULL && attacker->GetClassname() == "idPlayer" && (idStr::Cmpn(spawnArgs.GetString("classname"), "monster_", 8) == 0)) {
-		//int choice = gameLocal.random.RandomInt(gameLocal.GetLocalPlayer()->inventory.blueprints.Num());
-		//idStr bp = gameLocal.GetLocalPlayer()->inventory.blueprints[choice];
 		const char* bp;
 
 		int choice = gameLocal.random.RandomInt(3);
@@ -1839,6 +1829,15 @@ void idAI::Killed( idEntity *inflictor, idEntity *attacker, int damage, const id
 
 		common->Printf("+1 %s\n", bp);
 		GiveStuffToPlayer(gameLocal.GetLocalPlayer(), bp, "1");
+
+		// Life Steal Perk
+		const idDict* recipeDict = gameLocal.FindEntityDefDict("spike_lifesteal_def", false);
+		int stealAmt = recipeDict->GetInt("stealAmt", "0");
+
+		gameLocal.GetLocalPlayer()->health += stealAmt;
+		// END life steal perk
+
+
 	
 		gameLocal.GetLocalPlayer()->UpdateMaterialHUD(bp,1);
 		gameLocal.GetLocalPlayer()->BPUnlockProgress();
@@ -3990,7 +3989,7 @@ bool idAI::SkipImpulse( idEntity *ent, int id ){
 	if( move.moveCommand == MOVE_RV_PLAYBACK ){
 		return true;
 	}	
-	
+
 	return skip;
 }
 
